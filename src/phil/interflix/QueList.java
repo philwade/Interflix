@@ -1,7 +1,11 @@
 package phil.interflix;
 
 import android.app.ListActivity;
+
+import java.io.IOException;
 import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.URL;
 
 import oauth.signpost.OAuthConsumer;
 import oauth.signpost.basic.DefaultOAuthConsumer;
@@ -19,7 +23,21 @@ public class QueList extends ListActivity {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
+        URL u = null;
+        HttpURLConnection request = null;
+		try {
+			u = new URL("http://api.netflix.com/catalog/titles/autocomplete?oauth_consumer_key=zksyhhsj8uk85ckxpxurfw4v&term=arrested");
+		} catch (MalformedURLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+        try {
+			request = (HttpURLConnection) u.openConnection();
+			request.connect();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
         setListAdapter(new ArrayAdapter<String>(this, R.layout.que, COUNTRIES));
 
         ListView lv = getListView();
