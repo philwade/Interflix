@@ -3,9 +3,18 @@ package phil.interflix;
 import android.app.ListActivity;
 
 import java.io.IOException;
+import java.io.StringReader;
+import java.lang.reflect.Array;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
+
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+
+import org.w3c.dom.Document;
+import org.w3c.dom.NodeList;
+import org.xml.sax.InputSource;
 
 import oauth.signpost.OAuthConsumer;
 import oauth.signpost.basic.DefaultOAuthConsumer;
@@ -27,18 +36,24 @@ public class QueList extends ListActivity {
         HttpURLConnection request = null;
 		try {
 			u = new URL("http://api.netflix.com/catalog/titles/autocomplete?oauth_consumer_key=zksyhhsj8uk85ckxpxurfw4v&term=arrested");
-		} catch (MalformedURLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-        try {
 			request = (HttpURLConnection) u.openConnection();
 			request.connect();
-		} catch (IOException e) {
+			Document doc = loadXMLFromString((String)request.getContent());
+			String[] titles = nodeListToArray(doc.getElementsByTagName("title"));
+			setListAdapter(new ArrayAdapter<String>(this, R.layout.que, titles));
+    	} catch (MalformedURLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+		catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		catch (Exception e){
+			e.printStackTrace();
         setListAdapter(new ArrayAdapter<String>(this, R.layout.que, COUNTRIES));
+		}
+		
 
         ListView lv = getListView();
         lv.setTextFilterEnabled(true);
@@ -57,6 +72,27 @@ public class QueList extends ListActivity {
 			// TODO Auto-generated method stub
 		}
     };
+    
+    public static Document loadXMLFromString(String xml) throws Exception
+    {
+        DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+        DocumentBuilder builder = factory.newDocumentBuilder();
+        InputSource is = new InputSource(new StringReader(xml));
+        return builder.parse(is);
+    }
+    
+    public String[] nodeListToArray(NodeList list)
+    {
+    	int length = list.getLength();
+    	String[] arr = null;
+    	for(int i = list.getLength(); i < length;i++)
+    	{
+    		arr[i] = list.item(i).getNodeValue();
+    	}
+    	
+    	return arr;
+    }
+
     static final String[] COUNTRIES = new String[] {
     	"Afghanistan", "Albania", "Algeria", "American Samoa", "Andorra",
         "Angola", "Anguilla", "Antarctica", "Antigua and Barbuda", "Argentina",
