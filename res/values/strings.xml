@@ -13,8 +13,6 @@
         <item>Belize</item>
         <item>Benin</item>
     </string-array>
-    <string name="consumer_key">zksyhhsj8uk85ckxpxurfw4v</string>
-    <string name="shared_key">rAqtAeRYGT</string>
     <string name="autocomplete_url">http://api.netflix.com/catalog/titles/autocomplete</string>
     <string name="search_title">I\'m going to be search someday</string>
 </resources>
