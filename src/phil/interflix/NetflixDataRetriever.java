@@ -8,6 +8,12 @@ import java.io.StringReader;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 
+import oauth.signpost.OAuthConsumer;
+import oauth.signpost.commonshttp.CommonsHttpOAuthConsumer;
+import oauth.signpost.exception.OAuthCommunicationException;
+import oauth.signpost.exception.OAuthException;
+import oauth.signpost.exception.OAuthExpectationFailedException;
+
 import org.apache.http.HttpEntity;
 import org.apache.http.client.methods.HttpGet;
 import org.w3c.dom.Document;
@@ -56,6 +62,12 @@ public class NetflixDataRetriever {
     {
 		HttpGet request = new HttpGet(url);
 		return request;
+    }
+    
+    public static void signRequest(HttpGet request) throws OAuthException, OAuthExpectationFailedException, OAuthCommunicationException
+    {
+    	OAuthConsumer consumer = new CommonsHttpOAuthConsumer(consumerKey, sharedSecret);
+    	consumer.sign(request);
     }
     
     
