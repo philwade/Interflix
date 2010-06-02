@@ -1,13 +1,15 @@
 package phil.interflix;
 
 import java.io.BufferedReader;
+import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.StringReader;
-import java.net.HttpURLConnection;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 
+import org.apache.http.HttpEntity;
+import org.apache.http.client.methods.HttpGet;
 import org.w3c.dom.Document;
 import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.NodeList;
@@ -21,10 +23,10 @@ public class NetflixDataRetriever {
 	static final String consumerKey = "zksyhhsj8uk85ckxpxurfw4v";
 	static final String sharedSecret = "rAqtAeRYG";
 	
-    public static Document loadXMLFromConnection(HttpURLConnection connection) throws Exception
+    public static Document loadXMLFromEntity(HttpEntity entity) throws Exception
     {
     	BufferedReader in = new BufferedReader(
-    	new InputStreamReader(connection.getInputStream()));
+    	new InputStreamReader(entity.getContent()));
     	String inputLine;
     	StringBuilder xml = new StringBuilder();
 
@@ -49,4 +51,12 @@ public class NetflixDataRetriever {
     	
     	return arr;
     }
+    
+    public HttpGet createRequest(String url) throws IOException
+    {
+		HttpGet request = new HttpGet(url);
+		return request;
+    }
+    
+    
 }
