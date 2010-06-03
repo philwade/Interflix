@@ -47,7 +47,7 @@ public class NetflixQueRetriever extends NetflixDataRetriever {
     	String[] arr = new String[length];
     	for(int i = 0; i < length;i++)
     	{
-    		arr[i] = list.item(i).getNodeValue();
+    		arr[i] = list.item(i).getFirstChild().getNodeValue();
     	}
     	return arr;
 	}

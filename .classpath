@@ -5,5 +5,6 @@
 	<classpathentry kind="con" path="com.android.ide.eclipse.adt.ANDROID_FRAMEWORK"/>
 	<classpathentry kind="lib" path="/Users/phil/Documents/workspace/signpost-core-1.2.1.1.jar"/>
 	<classpathentry kind="lib" path="/Users/phil/Documents/workspace/commons-codec-1.4/commons-codec-1.4.jar"/>
+	<classpathentry kind="lib" path="/Users/phil/Documents/workspace/signpost-commonshttp4-1.2.1.1.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
