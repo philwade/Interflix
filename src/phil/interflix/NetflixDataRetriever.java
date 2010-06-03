@@ -27,7 +27,7 @@ import org.xml.sax.InputSource;
 public class NetflixDataRetriever {
 	
 	static final String consumerKey = "zksyhhsj8uk85ckxpxurfw4v";
-	static final String sharedSecret = "rAqtAeRYG";
+	static final String sharedSecret = "rAqtAeRYGT";
 	
     public static Document loadXMLFromEntity(HttpEntity entity) throws Exception
     {

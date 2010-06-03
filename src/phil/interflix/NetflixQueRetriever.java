@@ -24,7 +24,7 @@ public class NetflixQueRetriever extends NetflixDataRetriever {
 	
 	public String[] getQue() throws OAuthExpectationFailedException, OAuthCommunicationException, OAuthException
 	{
-		String url = "http://api.netflix.com/catalog/people";
+		String url = "http://api.netflix.com/catalog/people?term=neil";
 		try {
 			request = createRequest(url);
 			signRequest(request);
