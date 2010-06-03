@@ -21,11 +21,13 @@ import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.NodeList;
 import org.xml.sax.InputSource;
 
+import android.content.SharedPreferences;
+
 //import oauth.signpost.OAuthConsumer;
 //import oauth.signpost.basic.DefaultOAuthConsumer;
 
 public class NetflixDataRetriever {
-	
+	public static final String PREFS_FILE = "InterflixPrefs";	
 	static final String consumerKey = "zksyhhsj8uk85ckxpxurfw4v";
 	static final String sharedSecret = "rAqtAeRYGT";
 	
@@ -62,6 +64,17 @@ public class NetflixDataRetriever {
     {
 		HttpGet request = new HttpGet(url);
 		return request;
+    }
+    
+    public static void saveUserKeys(SharedPreferences prefs, String oauth_token, 
+    								String oauth_token_secret, String user_id)
+    {
+    	SharedPreferences.Editor editor = prefs.edit();
+    	editor.putString("oauth_token", oauth_token);
+    	editor.putString("oauth_token_secret", oauth_token_secret);
+    	editor.putString("user_id", user_id);
+    	editor.commit();
+    	
     }
     
     public static void signRequest(HttpGet request) throws OAuthException, OAuthExpectationFailedException, OAuthCommunicationException
