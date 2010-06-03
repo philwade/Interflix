@@ -1,5 +1,7 @@
 package phil.interflix;
 
+import java.io.IOException;
+
 import oauth.signpost.exception.OAuthCommunicationException;
 import oauth.signpost.exception.OAuthException;
 import oauth.signpost.exception.OAuthExpectationFailedException;
@@ -14,9 +16,9 @@ public class QueList extends ListActivity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         String[] names = null;
-        NetflixQueRetriever queRetriever = new NetflixQueRetriever();
         try {
-			names = queRetriever.getQue();
+        	NetflixSearchRetriever queRetriever = new NetflixSearchRetriever();
+			names = queRetriever.searchPeople("neil");
 		} catch (OAuthExpectationFailedException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -24,6 +26,9 @@ public class QueList extends ListActivity {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (OAuthException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}

@@ -8,11 +8,16 @@ import java.io.StringReader;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 
+import oauth.signpost.OAuth;
 import oauth.signpost.OAuthConsumer;
+import oauth.signpost.OAuthProvider;
 import oauth.signpost.commonshttp.CommonsHttpOAuthConsumer;
+import oauth.signpost.commonshttp.CommonsHttpOAuthProvider;
 import oauth.signpost.exception.OAuthCommunicationException;
 import oauth.signpost.exception.OAuthException;
 import oauth.signpost.exception.OAuthExpectationFailedException;
+import oauth.signpost.exception.OAuthMessageSignerException;
+import oauth.signpost.exception.OAuthNotAuthorizedException;
 
 import org.apache.http.HttpEntity;
 import org.apache.http.client.methods.HttpGet;
@@ -22,14 +27,20 @@ import org.w3c.dom.NodeList;
 import org.xml.sax.InputSource;
 
 import android.content.SharedPreferences;
+import android.net.Uri;
 
 //import oauth.signpost.OAuthConsumer;
 //import oauth.signpost.basic.DefaultOAuthConsumer;
 
 public class NetflixDataRetriever {
-	public static final String PREFS_FILE = "InterflixPrefs";	
+		
 	static final String consumerKey = "zksyhhsj8uk85ckxpxurfw4v";
 	static final String sharedSecret = "rAqtAeRYGT";
+	public static final String NETFLIX_REQUEST_TOKEN_URL = "http://api.netflix.com/oauth/request_token";
+    public static final String NETFLIX_ACCESS_TOKEN_URL = "http://api.netflix.com/oauth/access_token";
+    public static final String NETFLIX_AUTHORIZE_URL = "https://api-user.netflix.com/oauth/login";
+    public static final String APPLICATION_NAME = "InterFlix";
+    private static final Uri CALLBACK_URI = Uri.parse("interflix-app:///");
 	
     public static Document loadXMLFromEntity(HttpEntity entity) throws Exception
     {
@@ -81,6 +92,24 @@ public class NetflixDataRetriever {
     {
     	OAuthConsumer consumer = new CommonsHttpOAuthConsumer(consumerKey, sharedSecret);
     	consumer.sign(request);
+    }
+    
+    public static String requestAuthUrl() throws OAuthMessageSignerException, OAuthNotAuthorizedException, OAuthExpectationFailedException, OAuthCommunicationException
+    {
+    	OAuthProvider provider = new CommonsHttpOAuthProvider(NETFLIX_REQUEST_TOKEN_URL, NETFLIX_ACCESS_TOKEN_URL, NETFLIX_AUTHORIZE_URL);
+    	OAuthConsumer consumer = new CommonsHttpOAuthConsumer(consumerKey, sharedSecret);
+    	String authUrl = provider.retrieveRequestToken(consumer, CALLBACK_URI.toString());
+    	authUrl = OAuth.addQueryParameters(authUrl, OAuth.OAUTH_CONSUMER_KEY, consumerKey,
+                "application_name", APPLICATION_NAME);	
+    	return authUrl;
+    }
+    
+    public static void setupAccessTokens(String oauth_token, SharedPreferences prefs) throws OAuthMessageSignerException, OAuthNotAuthorizedException, OAuthExpectationFailedException, OAuthCommunicationException
+    {
+    	OAuthProvider provider = new CommonsHttpOAuthProvider(NETFLIX_REQUEST_TOKEN_URL, NETFLIX_ACCESS_TOKEN_URL, NETFLIX_AUTHORIZE_URL);
+    	OAuthConsumer consumer = new CommonsHttpOAuthConsumer(consumerKey, sharedSecret);
+    	provider.retrieveAccessToken(consumer, oauth_token);
+    	saveUserKeys(prefs, consumer.getToken(), consumer.getTokenSecret(), provider.getResponseParameters().get("user_id").first());
     }
     
     
