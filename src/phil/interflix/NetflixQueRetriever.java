@@ -18,4 +18,9 @@ public class NetflixQueRetriever extends NetflixDataRetriever {
 		client = new DefaultHttpClient();
 	}
 	
+	public String[] getQue()
+	{
+		String[] temp = {"test1", "test2"};
+		return temp;
+	}
 }

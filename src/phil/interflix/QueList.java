@@ -1,47 +1,34 @@
 package phil.interflix;
 
-import java.io.IOException;
 
-import oauth.signpost.exception.OAuthCommunicationException;
-import oauth.signpost.exception.OAuthException;
-import oauth.signpost.exception.OAuthExpectationFailedException;
-import android.app.ListActivity;
-
+import android.app.TabActivity;
+import android.content.Intent;
 import android.os.Bundle;
-import android.widget.ArrayAdapter;
+import android.widget.TabHost;
 
-public class QueList extends ListActivity {
+public class QueList extends TabActivity {
     /** Called when the activity is first created. */
-    @Override
     public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        String[] names = null;
-        try {
-        	NetflixSearchRetriever queRetriever = new NetflixSearchRetriever(getSharedPreferences(InterFlix.PREFS_FILE, 0));
-			names = queRetriever.searchPeople("neil");
-		} catch (OAuthExpectationFailedException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (OAuthCommunicationException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (OAuthException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		if(names != null)
-		{
-			setListAdapter(new ArrayAdapter<String>(this, R.layout.que, names));
-		}
-		else
-		{
-			setListAdapter(new ArrayAdapter<String>(this, R.layout.que, FAILURE));
-		}
-       
+    	super.onCreate(savedInstanceState);
+    	setContentView(R.layout.que);
+    	
+    	
+    	TabHost tabHost = getTabHost();  // The activity TabHost
+        TabHost.TabSpec spec;  // Resusable TabSpec for each tab
+        Intent intent;  // Reusable Intent for each tab
+ 
+        intent = new Intent().setClass(this, InstantQueActivity.class);
+        spec = tabHost.newTabSpec("instant").setIndicator("Instant").setContent(intent);
+        tabHost.addTab(spec);
+        
+
+        intent = new Intent().setClass(this, DiscQueActivity.class);
+        spec = tabHost.newTabSpec("discs").setIndicator("Discs").setContent(intent);
+        tabHost.addTab(spec);
+        tabHost.setCurrentTab(1);
     }
     
-private static final String[] FAILURE = { "Authorization failure"};
+    public static final String[] FAILURE = { "Authorization failure"};
+    
+    
 }
