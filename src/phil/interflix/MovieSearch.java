@@ -16,7 +16,7 @@ public class MovieSearch extends ListActivity {
         super.onCreate(savedInstanceState);
         String[] results;
 		try {
-			NetflixSearchRetriever search = new NetflixSearchRetriever();
+			NetflixSearchRetriever search = new NetflixSearchRetriever(getSharedPreferences(InterFlix.PREFS_FILE, 0));
 			results = search.getSearchTitles("arrest");
 			setListAdapter(new ArrayAdapter<String>(this, R.layout.que, results));
 		} catch (Exception e) {

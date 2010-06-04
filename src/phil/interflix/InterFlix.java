@@ -17,16 +17,19 @@ import android.widget.Toast;
 public class InterFlix extends Activity {
 	public static final String PREFS_FILE = "InterflixPrefs";
 	public boolean authDone = false;
+	public NetflixDataRetriever dataRetriever = null;
     /** Called when the activity is first created. */
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         SharedPreferences prefs = getSharedPreferences(PREFS_FILE, 0);
+		dataRetriever = new NetflixDataRetriever(prefs);
         
     	Uri uri = this.getIntent().getData();
 		if(uri != null && uri.toString().startsWith(NetflixDataRetriever.APP_URI)) {
-			handleAuthReturn(uri, prefs);
+			handleAuthReturn(uri, dataRetriever);
 			authDone = true;
+		  	Toast.makeText(getApplicationContext(), "Thanks for registering", 1000).show();
 		}
         
         String user_id = prefs.getString("user_id", null);
@@ -37,15 +40,9 @@ public class InterFlix extends Activity {
         
         if(!authDone)
         {
+		  	Toast.makeText(getApplicationContext(), "Welcome to InterFlix. Since you're new, we just need to set you up.", 2000).show();
         	try {
-				String requestAuthUrl = NetflixDataRetriever.requestAuthUrl(prefs);
-				SharedPreferences.Editor editor = prefs.edit();
-				Uri authUri = Uri.parse(requestAuthUrl);
-				//save some stuff here cause we need it later to get our access tokens...
-				//OAuth is insane, btw
-				String requestToken = authUri.getQueryParameter("oauth_token");
-				editor.putString("request_key", requestToken);
-				editor.commit();
+				Uri authUri = dataRetriever.requestAuthUri();
 				Intent intent = new Intent(Intent.ACTION_VIEW, authUri);
 				startActivityForResult(intent, 0);
 			} catch (OAuthMessageSignerException e) {
@@ -68,6 +65,8 @@ public class InterFlix extends Activity {
     	que.setOnClickListener(queListener());
     	TextView search = (TextView) findViewById(R.id.search_link_view);
     	search.setOnClickListener(searchListener());
+    	TextView clear = (TextView) findViewById(R.id.clear_link_view);
+    	clear.setOnClickListener(clearListener());
     }
     
     public OnClickListener queListener()
@@ -96,12 +95,24 @@ public class InterFlix extends Activity {
     	};
     }
     
-    public void handleAuthReturn(Uri uri, SharedPreferences prefs)
+    //for debuggin
+    public OnClickListener clearListener()
+    {
+    	return new OnClickListener()
+    	{
+    		public void onClick(View v)
+    		{
+    			dataRetriever.cleanPreferences();
+    			Toast.makeText(getApplicationContext(), "Preferences cleared", 1000).show();
+    		}
+    	};
+    }
+    
+    public void handleAuthReturn(Uri uri, NetflixDataRetriever dataRetriever)
     {
         	try {
 			  	String access_token = uri.getQueryParameter("oauth_token");
-			  	NetflixDataRetriever.setupAccessTokens(access_token, prefs);
-			  	Toast.makeText(getApplicationContext(), "Thanks for registering", 200);
+			  	dataRetriever.setupAccessTokens(access_token);
 			} catch (OAuthMessageSignerException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();

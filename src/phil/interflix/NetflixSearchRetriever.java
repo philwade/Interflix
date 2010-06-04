@@ -13,14 +13,17 @@ import org.apache.http.impl.client.DefaultHttpClient;
 import org.w3c.dom.Document;
 import org.w3c.dom.NodeList;
 
+import android.content.SharedPreferences;
+
 
 public class NetflixSearchRetriever extends NetflixDataRetriever {
 	
 	private HttpGet request = null;
 	private DefaultHttpClient client = null;
 	
-	public NetflixSearchRetriever() throws IOException
+	public NetflixSearchRetriever(SharedPreferences prefs) throws IOException
 	{
+		super(prefs);
 		client = new DefaultHttpClient();
 	}
 	

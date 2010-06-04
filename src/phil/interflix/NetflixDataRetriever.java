@@ -9,7 +9,6 @@ import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 
 import oauth.signpost.OAuth;
-import oauth.signpost.OAuthConsumer;
 import oauth.signpost.OAuthProvider;
 import oauth.signpost.commonshttp.CommonsHttpOAuthConsumer;
 import oauth.signpost.commonshttp.CommonsHttpOAuthProvider;
@@ -42,7 +41,17 @@ public class NetflixDataRetriever {
     public static final String APPLICATION_NAME = "InterFlix";
     public static final String APP_URI = "interflix-app:///";
     private static final Uri CALLBACK_URI = Uri.parse("interflix-app:///");
-	
+    
+    public CommonsHttpOAuthConsumer consumer = new CommonsHttpOAuthConsumer(consumerKey, sharedSecret);
+	public OAuthProvider provider = new CommonsHttpOAuthProvider(NETFLIX_REQUEST_TOKEN_URL, NETFLIX_ACCESS_TOKEN_URL, NETFLIX_AUTHORIZE_URL);
+	private SharedPreferences prefs;
+   
+    public NetflixDataRetriever(SharedPreferences preferences)
+    {
+    	this.prefs = preferences;
+    	//use prefs to populate consumer correctly here...
+    }
+    
     public static Document loadXMLFromEntity(HttpEntity entity) throws Exception
     {
     	BufferedReader in = new BufferedReader(
@@ -89,32 +98,45 @@ public class NetflixDataRetriever {
     	
     }
     
-    public static void signRequest(HttpGet request) throws OAuthException, OAuthExpectationFailedException, OAuthCommunicationException
+    public void signRequest(HttpGet request) throws OAuthException, OAuthExpectationFailedException, OAuthCommunicationException
     {
-    	OAuthConsumer consumer = new CommonsHttpOAuthConsumer(consumerKey, sharedSecret);
     	consumer.sign(request);
     }
     
-    public static String requestAuthUrl(SharedPreferences prefs) throws OAuthMessageSignerException, OAuthNotAuthorizedException, OAuthExpectationFailedException, OAuthCommunicationException
+    public Uri requestAuthUri() throws OAuthMessageSignerException, OAuthNotAuthorizedException, OAuthExpectationFailedException, OAuthCommunicationException
     {
-    	SharedPreferences.Editor editor = prefs.edit();
-    	OAuthProvider provider = new CommonsHttpOAuthProvider(NETFLIX_REQUEST_TOKEN_URL, NETFLIX_ACCESS_TOKEN_URL, NETFLIX_AUTHORIZE_URL);
-    	OAuthConsumer consumer = new CommonsHttpOAuthConsumer(consumerKey, sharedSecret);
+    	//found out where to send the user
     	String authUrl = provider.retrieveRequestToken(consumer, CALLBACK_URI.toString());
-    	editor.putString("request_key_secret", consumer.getTokenSecret());
-    	editor.commit();
     	authUrl = OAuth.addQueryParameters(authUrl, OAuth.OAUTH_CONSUMER_KEY, consumerKey,
                 "application_name", APPLICATION_NAME);	
-    	return authUrl;
+    	Uri authUri = Uri.parse(authUrl);
+    	
+    	//save this stuff - we need it again to get the access token and secret
+    	String requestToken = authUri.getQueryParameter("oauth_token");
+    	SharedPreferences.Editor editor = prefs.edit();
+    	editor.putString("request_key_secret", consumer.getTokenSecret());
+		editor.putString("request_key", requestToken);
+    	editor.commit();
+    	
+    	return authUri;
     }
     
-    public static void setupAccessTokens(String oauth_token, SharedPreferences prefs) throws OAuthMessageSignerException, OAuthNotAuthorizedException, OAuthExpectationFailedException, OAuthCommunicationException
+    public void setupAccessTokens(String oauth_token) throws OAuthMessageSignerException, OAuthNotAuthorizedException, OAuthExpectationFailedException, OAuthCommunicationException
     {
-    	OAuthConsumer consumer = new CommonsHttpOAuthConsumer(consumerKey, sharedSecret);
     	consumer.setTokenWithSecret(prefs.getString("request_key", ""), prefs.getString("request_key_secret", ""));
-    	OAuthProvider provider = new CommonsHttpOAuthProvider(NETFLIX_REQUEST_TOKEN_URL, NETFLIX_ACCESS_TOKEN_URL, NETFLIX_AUTHORIZE_URL);
     	provider.retrieveAccessToken(consumer, oauth_token);
     	saveUserKeys(prefs, consumer.getToken(), consumer.getTokenSecret(), provider.getResponseParameters().get("user_id").first());
+    }
+    
+    public void cleanPreferences()
+    {
+    	SharedPreferences.Editor editor = prefs.edit();
+    	editor.putString("request_key", null);
+    	editor.putString("request_key_secret", null);
+    	editor.putString("user_id", null);
+    	editor.putString("oauth_token", null);
+    	editor.putString("oauth_token_secret", null);
+    	editor.commit();
     }
     
     

@@ -17,7 +17,7 @@ public class QueList extends ListActivity {
         super.onCreate(savedInstanceState);
         String[] names = null;
         try {
-        	NetflixSearchRetriever queRetriever = new NetflixSearchRetriever();
+        	NetflixSearchRetriever queRetriever = new NetflixSearchRetriever(getSharedPreferences(InterFlix.PREFS_FILE, 0));
 			names = queRetriever.searchPeople("neil");
 		} catch (OAuthExpectationFailedException e) {
 			// TODO Auto-generated catch block
