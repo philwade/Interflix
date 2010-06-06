@@ -25,7 +25,7 @@ public class QueList extends TabActivity {
         intent = new Intent().setClass(this, DiscQueActivity.class);
         spec = tabHost.newTabSpec("discs").setIndicator("Discs").setContent(intent);
         tabHost.addTab(spec);
-        tabHost.setCurrentTab(1);
+        tabHost.setCurrentTab(0);
     }
     
     public static final String[] FAILURE = { "Authorization failure"};

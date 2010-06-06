@@ -41,6 +41,9 @@ public class NetflixDataRetriever {
     public static final String APPLICATION_NAME = "InterFlix";
     public static final String APP_URI = "interflix-app:///";
     private static final Uri CALLBACK_URI = Uri.parse("interflix-app:///");
+    public String userId;
+    public String userToken;
+    public String userSecret;
     
     public CommonsHttpOAuthConsumer consumer = new CommonsHttpOAuthConsumer(consumerKey, sharedSecret);
 	public OAuthProvider provider = new CommonsHttpOAuthProvider(NETFLIX_REQUEST_TOKEN_URL, NETFLIX_ACCESS_TOKEN_URL, NETFLIX_AUTHORIZE_URL);
@@ -49,6 +52,13 @@ public class NetflixDataRetriever {
     public NetflixDataRetriever(SharedPreferences preferences)
     {
     	this.prefs = preferences;
+    	userToken =  prefs.getString("oauth_token", null);
+    	userSecret = prefs.getString("oauth_token_secret", null);
+    	userId = prefs.getString("user_id", null);
+    	if(userId != null)
+    	{
+    		consumer.setTokenWithSecret(userToken, userSecret);
+    	}
     	//use prefs to populate consumer correctly here...
     }
     
