@@ -1,9 +1,10 @@
-package phil.interflix;
+package org.philwade.android.interflix;
 
 import oauth.signpost.exception.OAuthCommunicationException;
 import oauth.signpost.exception.OAuthExpectationFailedException;
 import oauth.signpost.exception.OAuthMessageSignerException;
 import oauth.signpost.exception.OAuthNotAuthorizedException;
+import org.philwade.android.interflix.R;
 import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;

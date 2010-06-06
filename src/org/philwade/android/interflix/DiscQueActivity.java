@@ -1,5 +1,6 @@
-package phil.interflix;
+package org.philwade.android.interflix;
 
+import org.philwade.android.interflix.R;
 import android.app.ListActivity;
 import android.os.Bundle;
 import android.widget.ArrayAdapter;

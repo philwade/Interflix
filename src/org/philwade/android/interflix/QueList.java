@@ -1,6 +1,7 @@
-package phil.interflix;
+package org.philwade.android.interflix;
 
 
+import org.philwade.android.interflix.R;
 import android.app.TabActivity;
 import android.content.Intent;
 import android.os.Bundle;

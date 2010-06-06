@@ -1,4 +1,4 @@
-package phil.interflix;
+package org.philwade.android.interflix;
 
 import java.io.BufferedReader;
 import java.io.IOException;
