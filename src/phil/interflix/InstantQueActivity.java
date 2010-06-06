@@ -12,11 +12,11 @@ public class InstantQueActivity extends ListActivity {
 			names = queRetriever.getQue();
 			if(names != null)
 			{
-				setListAdapter(new ArrayAdapter<String>(this, R.layout.que, names));
+				setListAdapter(new ArrayAdapter<String>(this, R.layout.quelist, names));
 			}
 			else
 			{
-				setListAdapter(new ArrayAdapter<String>(this, R.layout.que, QueList.FAILURE));
+				setListAdapter(new ArrayAdapter<String>(this, R.layout.quelist, QueList.FAILURE));
 			}
 		}
 }
