@@ -4,11 +4,24 @@
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
     >
-<TextView  
+<EditText
+	android:id="@+id/entry"
+	android:layout_width="fill_parent"
+	android:layout_height="wrap_content"
+	android:background="@android:drawable/editbox_background"/>
+<Button
+	android:id="@+id/ok"
+	android:layout_width="wrap_content"
+	android:layout_height="wrap_content"
+	android:layout_alignParentRight="true"
+	android:layout_marginLeft="10dip"
+	android:text="OK" />
+    
+<ListView  
 	android:id="@+id/search_title_view"
 	android:textSize="15pt"
     android:layout_width="fill_parent" 
     android:layout_height="wrap_content" 
-    android:text="@string/search_title"
+	android:layout_below="@id/ok"
     />
 </LinearLayout>

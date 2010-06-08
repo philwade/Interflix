@@ -41,7 +41,7 @@ public class InterFlix extends Activity {
         
         if(!authDone)
         {
-		  	Toast.makeText(getApplicationContext(), "Welcome to InterFlix. Since you're new, we just need to set you up.", 2000).show();
+		  	Toast.makeText(getApplicationContext(), "Welcome to InterFlix. Since you're new, we just need to set you up.", 5000).show();
         	try {
 				Uri authUri = dataRetriever.requestAuthUri();
 				Intent intent = new Intent(Intent.ACTION_VIEW, authUri);
@@ -77,7 +77,7 @@ public class InterFlix extends Activity {
     		public void onClick(View v)
     		{
     			Intent queIntent = new Intent();
-    			queIntent.setClassName("phil.interflix", "phil.interflix.QueList");
+    			queIntent.setClassName("org.philwade.android.interflix", "org.philwade.android.interflix.QueList");
     			startActivity(queIntent);
     		}
     	};
@@ -90,7 +90,7 @@ public class InterFlix extends Activity {
     		public void onClick(View v)
     		{
     			Intent queIntent = new Intent();
-    			queIntent.setClassName("phil.interflix", "phil.interflix.MovieSearch");
+    			queIntent.setClassName("org.philwade.android.interflix", "org.philwade.android.interflix.MovieSearch");
     			startActivity(queIntent);
     		}
     	};
