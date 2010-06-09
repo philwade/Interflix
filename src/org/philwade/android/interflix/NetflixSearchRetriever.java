@@ -29,8 +29,9 @@ public class NetflixSearchRetriever extends NetflixDataRetriever {
 	
 	public String[] getSearchTitles(String searchString) throws Exception
 	{
-		String url = "http://api.netflix.com/catalog/titles/autocomplete?oauth_consumer_key=" + consumerKey + "&term=" + searchString; 
+		String url = "http://api.netflix.com/catalog/titles?term=" + searchString + "&max_results=25"; 
 		request = this.createRequest(url);
+		signRequest(request);
 		try {
 			HttpResponse response = client.execute(request);
 			Document xml = loadXMLFromEntity(response.getEntity());

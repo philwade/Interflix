@@ -3,29 +3,56 @@ package org.philwade.android.interflix;
 import org.philwade.android.interflix.R;
 import android.app.ListActivity;
 import android.os.Bundle;
+import android.os.Handler;
 import android.widget.ArrayAdapter;
 import android.widget.Toast;
 
 public class DiscQueActivity extends ListActivity {
+	public String[] queItems;
 	public void onCreate(Bundle savedInstanceState) {
 	   super.onCreate(savedInstanceState);
        String[] names = null;
-       NetflixQueRetriever queRetriever = new NetflixQueRetriever(getSharedPreferences(InterFlix.PREFS_FILE, 0));
-		try {
-			names = queRetriever.getDiscQue();
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			Toast.makeText(this, "Unable to fetch disc que", 200).show();
-			names = null;
-			e.printStackTrace();
-		}
-		if(names != null)
+			setListAdapter(new ArrayAdapter<String>(this, R.layout.quelist));
+			getQueContents();
+	}
+	
+	final Handler queHandler = new Handler();
+	
+	final Runnable updateQue = new Runnable()
+	{
+		@SuppressWarnings("unchecked")
+		public void run() 
 		{
-			setListAdapter(new ArrayAdapter<String>(this, R.layout.quelist, names));
+			if(queItems != null)
+			{
+				ArrayAdapter<String> la = (ArrayAdapter<String>) getListAdapter();
+				la.clear();
+				for(String item : queItems)
+				{
+					la.add(item);
+				}
+				la.notifyDataSetChanged();
+			}
 		}
-		else
+	};
+	
+	public void getQueContents()
+	{
+		Thread t = new Thread()
 		{
-			setListAdapter(new ArrayAdapter<String>(this, R.layout.quelist, QueList.FAILURE));
-		}
+			public void run()
+			{
+				NetflixQueRetriever queRetriever = new NetflixQueRetriever(getSharedPreferences(InterFlix.PREFS_FILE, 0));
+				try {
+					queItems = queRetriever.getDiscQue();
+				} catch (Exception e) {
+					Toast.makeText(getApplicationContext(), "Unable to retrieve disc que", 2000).show();
+					e.printStackTrace();
+				}
+				queHandler.post(updateQue);
+			}
+				
+		};
+		t.start();
 	}
 }
