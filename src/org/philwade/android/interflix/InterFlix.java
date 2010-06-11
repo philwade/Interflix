@@ -68,6 +68,15 @@ public class InterFlix extends Activity {
     	search.setOnClickListener(searchListener());
     	TextView clear = (TextView) findViewById(R.id.clear_link_view);
     	clear.setOnClickListener(clearListener());
+    	TextView title = (TextView) findViewById(R.id.title_link_view);
+    	title.setOnClickListener(new OnClickListener(){
+    		public void onClick(View v)
+    		{
+    			Intent titleIntent = new Intent();
+    			titleIntent.setClassName("org.philwade.android.interflix", "org.philwade.android.interflix.TitleActivity");
+    			startActivity(titleIntent);
+    		}
+    	});
     }
     
     public OnClickListener queListener()

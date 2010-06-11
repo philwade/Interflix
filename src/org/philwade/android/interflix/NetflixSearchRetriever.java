@@ -46,6 +46,17 @@ public class NetflixSearchRetriever extends NetflixDataRetriever {
 		}
 	}
 	
+	public NodeList getSearchTitlesNodeList(String searchString) throws Exception
+	{
+		String url = "http://api.netflix.com/catalog/titles?term=" + searchString + "&max_results=25"; 
+		request = this.createRequest(url);
+		signRequest(request);
+		HttpResponse response = client.execute(request);
+		Document xml = loadXMLFromEntity(response.getEntity());
+		NodeList results = xml.getElementsByTagName("catalog_title");
+		return results;
+	}
+	
 	public String[] searchPeople(String term) throws OAuthExpectationFailedException, OAuthCommunicationException, OAuthException
 	{
 		String url = "http://api.netflix.com/catalog/people?term=" + term + "&max_results=25";

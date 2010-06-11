@@ -4,6 +4,7 @@
     <string name="app_name">InterFlix</string>
     <string name="que_link">Go to Que</string>
     <string name="search_link">Go to Search</string>
+    <string name="title_link">title view</string>
     <string name="clear_link">clear prefs</string>
     <string-array name="countries_array">
         <item>Bahrain</item>
