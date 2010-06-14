@@ -6,7 +6,6 @@ import android.app.TabActivity;
 import android.content.Intent;
 import android.content.res.Resources;
 import android.os.Bundle;
-import android.view.Window;
 import android.widget.TabHost;
 
 public class QueList extends TabActivity {

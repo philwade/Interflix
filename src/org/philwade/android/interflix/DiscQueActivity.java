@@ -11,7 +11,6 @@ public class DiscQueActivity extends ListActivity {
 	public String[] queItems;
 	public void onCreate(Bundle savedInstanceState) {
 	   super.onCreate(savedInstanceState);
-       String[] names = null;
 			setListAdapter(new ArrayAdapter<String>(this, R.layout.quelist));
 			getQueContents();
 	}
