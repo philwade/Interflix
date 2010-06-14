@@ -2,7 +2,7 @@ package org.philwade.android.interflix;
 
 import java.io.IOException;
 
-import org.w3c.dom.Node;
+import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
 
 import android.app.Activity;
@@ -18,7 +18,7 @@ public class TitleActivity extends Activity
 		try {
 			NetflixSearchRetriever searchRetriever = new NetflixSearchRetriever(getSharedPreferences(InterFlix.PREFS_FILE, 0));
 			NodeList nodes = searchRetriever.getSearchTitlesNodeList("glee");
-			Node node = nodes.item(0);
+			Element node = (Element) nodes.item(0);
 			
 			if(node != null)
 			{

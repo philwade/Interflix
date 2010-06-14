@@ -8,6 +8,7 @@ import javax.xml.transform.dom.DOMResult;
 import javax.xml.transform.dom.DOMSource;
 
 import org.w3c.dom.Document;
+import org.w3c.dom.Element;
 import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
@@ -20,15 +21,9 @@ public class NetflixTitle {
 	public int id;
 	private Document movieDoc;
 	
-	public NetflixTitle(Node titleNode) throws ParserConfigurationException, TransformerException
+	public NetflixTitle(Element titleElement) throws ParserConfigurationException, TransformerException
 	{
-		TransformerFactory tf = TransformerFactory.newInstance();
-		Transformer xf = tf.newTransformer();
-		DOMResult dr = new DOMResult();
-		xf.transform(new DOMSource(titleNode), dr);
-		movieDoc = (Document) dr.getNode();
-
-		NodeList titles = movieDoc.getElementsByTagName("title");
+		NodeList titles = titleElement.getElementsByTagName("title");
 		NamedNodeMap titleAttributes = titles.item(0).getAttributes();
 		title = titleAttributes.getNamedItem("short").getTextContent();
 	}
