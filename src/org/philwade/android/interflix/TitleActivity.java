@@ -25,6 +25,8 @@ public class TitleActivity extends Activity
 				NetflixTitle title = new NetflixTitle(node);
 				TextView titleTitle = (TextView) findViewById(R.id.title_title);
 				titleTitle.setText(title.title);
+				TextView titleSynopsis = (TextView) findViewById(R.id.title_synopsis);
+				titleSynopsis.setText(title.synopsis);
 			}
 		} catch (IOException e) {
 			// TODO Auto-generated catch block

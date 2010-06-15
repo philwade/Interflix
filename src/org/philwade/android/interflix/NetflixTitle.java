@@ -2,6 +2,7 @@ package org.philwade.android.interflix;
 
 import org.w3c.dom.Element;
 import org.w3c.dom.NamedNodeMap;
+import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
 public class NetflixTitle {
@@ -10,14 +11,33 @@ public class NetflixTitle {
 	public String coverArt;
 	public String synopsis;
 	public int id;
-	private Element movieElement;
 	
 	public NetflixTitle(Element titleElement)
 	{
-		movieElement = titleElement;
 		NodeList titles = titleElement.getElementsByTagName("title");
 		NamedNodeMap titleAttributes = titles.item(0).getAttributes();
 		title = titleAttributes.getNamedItem("short").getNodeValue();
 		
+		NodeList links = titleElement.getElementsByTagName("link");
+		handleLinks(links);
+		NodeList art = titleElement.getElementsByTagName("box_art");
+		NodeList id = titleElement.getElementsByTagName("id");
+	}
+	
+	public void handleLinks(NodeList links)
+	{
+		int length = links.getLength();
+		for(int i = 0; i < length;i++)
+		{
+			Element el = (Element) links.item(i);
+			//all link nodes should have a title attribute
+			String textLinkTitle = el.getAttribute("title");
+			
+			if(textLinkTitle.equals("synopsis"))
+			{
+				synopsis = el.getAttribute("href");
+			}
+			
+		}
 	}
 }
