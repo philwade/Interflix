@@ -2,11 +2,13 @@ package org.philwade.android.interflix;
 
 import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.StringReader;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
 
 import oauth.signpost.OAuth;
 import oauth.signpost.OAuthProvider;
@@ -19,14 +21,22 @@ import oauth.signpost.exception.OAuthMessageSignerException;
 import oauth.signpost.exception.OAuthNotAuthorizedException;
 
 import org.apache.http.HttpEntity;
+import org.apache.http.HttpResponse;
+import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.methods.HttpGet;
+import org.apache.http.impl.client.DefaultHttpClient;
 import org.w3c.dom.Document;
 import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.NodeList;
 import org.xml.sax.InputSource;
+import org.xml.sax.SAXException;
 
 import android.content.SharedPreferences;
+import android.graphics.drawable.Drawable;
 import android.net.Uri;
+import android.os.Handler;
+import android.os.Message;
+import android.widget.ImageView;
 
 //import oauth.signpost.OAuthConsumer;
 //import oauth.signpost.basic.DefaultOAuthConsumer;
@@ -75,6 +85,13 @@ public class NetflixDataRetriever {
         DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
         DocumentBuilder builder = factory.newDocumentBuilder();
         InputSource is = new InputSource(new StringReader(xml.toString()));
+        return builder.parse(is);
+    }
+    
+    public static Document buildDocumentFromInputStream(InputStream is) throws ParserConfigurationException, SAXException, IOException
+    {
+        DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+        DocumentBuilder builder = factory.newDocumentBuilder();
         return builder.parse(is);
     }
     
@@ -136,6 +153,72 @@ public class NetflixDataRetriever {
     	consumer.setTokenWithSecret(prefs.getString("request_key", ""), prefs.getString("request_key_secret", ""));
     	provider.retrieveAccessToken(consumer, oauth_token);
     	saveUserKeys(prefs, consumer.getToken(), consumer.getTokenSecret(), provider.getResponseParameters().get("user_id").first());
+    }
+    
+    public void fetchImageOnThread(final String urlString, final ImageView imageView)
+    {
+    	final Handler handler = new Handler() {
+    		@Override
+    		public void handleMessage(Message message) {
+    			imageView.setImageDrawable((Drawable) message.obj);
+    		}
+    	};
+
+    	Thread thread = new Thread() {
+    		@Override
+    		public void run() {
+    			//TODO : set imageView to a "pending" image
+    			Drawable drawable = null;
+				try {
+					drawable = fetchDrawable(urlString);
+				} catch (IllegalStateException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				} catch (OAuthExpectationFailedException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				} catch (OAuthCommunicationException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				} catch (OAuthException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+    			Message message = handler.obtainMessage(1, drawable);
+    			handler.sendMessage(message);
+    		}
+    	};
+    	thread.start();
+    }
+    
+    public Drawable fetchDrawable(String urlString) throws IllegalStateException, IOException, OAuthExpectationFailedException, OAuthCommunicationException, OAuthException
+    {
+    	InputStream stream = fetch(urlString);
+    	Drawable drawable = Drawable.createFromStream(stream, "src");
+    	return drawable;
+    }
+    
+    public InputStream fetch(String urlString) throws ClientProtocolException, OAuthExpectationFailedException, OAuthCommunicationException, IOException, OAuthException
+    {
+    	return fetch(urlString, false);
+    }
+    
+    public InputStream fetch(String urlString, boolean signed) throws ClientProtocolException, IOException, OAuthExpectationFailedException, OAuthCommunicationException, OAuthException
+    {
+    	DefaultHttpClient httpClient = new DefaultHttpClient();
+    	HttpGet request = new HttpGet(urlString);
+    	
+    	if(signed)
+    	{
+    		signRequest(request);
+    	}
+    	HttpResponse response = httpClient.execute(request);
+    	InputStream stream = response.getEntity().getContent();
+    	
+    	return stream;
     }
     
     public void cleanPreferences()

@@ -6,11 +6,13 @@ import android.app.TabActivity;
 import android.content.Intent;
 import android.content.res.Resources;
 import android.os.Bundle;
+import android.view.Window;
 import android.widget.TabHost;
 
 public class QueList extends TabActivity {
     /** Called when the activity is first created. */
     public void onCreate(Bundle savedInstanceState) {
+    	requestWindowFeature(Window.FEATURE_INDETERMINATE_PROGRESS);
     	super.onCreate(savedInstanceState);
     	setContentView(R.layout.que);
     	

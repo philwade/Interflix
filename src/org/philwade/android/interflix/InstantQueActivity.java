@@ -22,6 +22,7 @@ public class InstantQueActivity extends ListActivity {
 		@SuppressWarnings("unchecked")
 		public void run() 
 		{
+			getParent().setProgressBarIndeterminateVisibility(false);
 			if(queItems != null)
 			{
 				ArrayAdapter<String> la = (ArrayAdapter<String>) getListAdapter();
@@ -41,6 +42,7 @@ public class InstantQueActivity extends ListActivity {
 		{
 			public void run()
 			{
+				getParent().setProgressBarIndeterminateVisibility(true);
 				NetflixQueRetriever queRetriever = new NetflixQueRetriever(getSharedPreferences(InterFlix.PREFS_FILE, 0));
 				try {
 					queItems = queRetriever.getInstantQue();
