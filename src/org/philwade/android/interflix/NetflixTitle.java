@@ -24,15 +24,23 @@ public class NetflixTitle {
 		title = titleAttributes.getNamedItem("short").getNodeValue();
 		
 		NodeList synopsees = titleElement.getElementsByTagName("synopsis");
-		if(synopsees != null)
+		try
 		{
 			synopsis = synopsees.item(0).getChildNodes().item(0).getNodeValue();
+		}catch(NullPointerException e){
+			//getElementsBytagname is trickseee
+			synopsis = null;
 		}
 		NodeList art = titleElement.getElementsByTagName("box_art");
 		Element artEl = (Element) art.item(0);
 		coverArt = artEl.getAttribute("medium");
 		NodeList id = titleElement.getElementsByTagName("id");
 		idUrl = id.item(0).getChildNodes().item(0).getNodeValue();
+	}
+	
+	public String toString()
+	{
+		return title;
 	}
 	
 	public void handleLinks(NodeList links)

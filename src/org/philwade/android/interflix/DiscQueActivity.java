@@ -5,13 +5,12 @@ import android.app.ListActivity;
 import android.os.Bundle;
 import android.os.Handler;
 import android.widget.ArrayAdapter;
-import android.widget.Toast;
 
 public class DiscQueActivity extends ListActivity {
-	public String[] queItems;
+	public NetflixTitle[] queItems;
 	public void onCreate(Bundle savedInstanceState) {
 	   super.onCreate(savedInstanceState);
-			setListAdapter(new ArrayAdapter<String>(this, R.layout.quelist));
+			setListAdapter(new ArrayAdapter<NetflixTitle>(this, R.layout.quelist));
 			getQueContents();
 	}
 	
@@ -24,9 +23,9 @@ public class DiscQueActivity extends ListActivity {
 		{
 			if(queItems != null)
 			{
-				ArrayAdapter<String> la = (ArrayAdapter<String>) getListAdapter();
+				ArrayAdapter<NetflixTitle> la = (ArrayAdapter<NetflixTitle>) getListAdapter();
 				la.clear();
-				for(String item : queItems)
+				for(NetflixTitle item : queItems)
 				{
 					la.add(item);
 				}
@@ -45,7 +44,6 @@ public class DiscQueActivity extends ListActivity {
 				try {
 					queItems = queRetriever.getDiscQue();
 				} catch (Exception e) {
-					Toast.makeText(getApplicationContext(), "Unable to retrieve disc que", 2000).show();
 					e.printStackTrace();
 				}
 				queHandler.post(updateQue);
