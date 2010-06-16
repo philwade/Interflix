@@ -1,7 +1,7 @@
 package org.philwade.android.interflix;
 
+import org.w3c.dom.Document;
 import org.w3c.dom.Element;
-import org.w3c.dom.NodeList;
 
 import android.app.Activity;
 import android.os.Bundle;
@@ -46,11 +46,10 @@ public class TitleActivity extends Activity
 			public void run()
 			{
 				setProgressBarIndeterminateVisibility(true);
-				Element node = null;
+				Document node = null;
 				try{
 					NetflixSearchRetriever searchRetriever = new NetflixSearchRetriever(getSharedPreferences(InterFlix.PREFS_FILE, 0));
-					NodeList nodes = searchRetriever.getSearchTitlesNodeList("glee");	
-					node = (Element) nodes.item(0);
+					node = searchRetriever.fetchDocument("http://api.netflix.com/catalog/titles/movies/60021896");
 				} catch (Exception e) {
 					Toast.makeText(getApplicationContext(), "Unable to retrieve title data", 3000).show();
 				e.printStackTrace();

@@ -1,5 +1,6 @@
 package org.philwade.android.interflix;
 
+import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.NodeList;
@@ -11,6 +12,10 @@ public class NetflixTitle {
 	public String synopsis;
 	public int id;
 	
+	public NetflixTitle(Document rootElement)
+	{
+		this((Element) rootElement.getElementsByTagName("catalog_title").item(0));
+	}
 	public NetflixTitle(Element titleElement)
 	{
 		NodeList titles = titleElement.getElementsByTagName("title");
@@ -21,7 +26,7 @@ public class NetflixTitle {
 		handleLinks(links);
 		NodeList art = titleElement.getElementsByTagName("box_art");
 		Element artEl = (Element) art.item(0);
-		coverArt = artEl.getAttribute("small");
+		coverArt = artEl.getAttribute("medium");
 		NodeList id = titleElement.getElementsByTagName("id");
 	}
 	
