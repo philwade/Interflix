@@ -10,6 +10,7 @@ public class NetflixTitle {
 	public String title;
 	public String coverArt;
 	public String synopsis;
+	public String idUrl;
 	public int id;
 	
 	public NetflixTitle(Document rootElement)
@@ -22,12 +23,16 @@ public class NetflixTitle {
 		NamedNodeMap titleAttributes = titles.item(0).getAttributes();
 		title = titleAttributes.getNamedItem("short").getNodeValue();
 		
-		NodeList links = titleElement.getElementsByTagName("link");
-		handleLinks(links);
+		NodeList synopsees = titleElement.getElementsByTagName("synopsis");
+		if(synopsees != null)
+		{
+			synopsis = synopsees.item(0).getChildNodes().item(0).getNodeValue();
+		}
 		NodeList art = titleElement.getElementsByTagName("box_art");
 		Element artEl = (Element) art.item(0);
 		coverArt = artEl.getAttribute("medium");
 		NodeList id = titleElement.getElementsByTagName("id");
+		idUrl = id.item(0).getChildNodes().item(0).getNodeValue();
 	}
 	
 	public void handleLinks(NodeList links)
