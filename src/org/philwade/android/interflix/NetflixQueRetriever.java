@@ -12,13 +12,10 @@ import android.content.SharedPreferences;
 
 public class NetflixQueRetriever extends NetflixDataRetriever {
 	
-	private HttpGet request = null;
-	private DefaultHttpClient client = null;
 	
 	public NetflixQueRetriever(SharedPreferences prefs)
 	{
 		super(prefs);
-		client = new DefaultHttpClient();
 	}
 	
 	public String[] getInstantQue() throws Exception
@@ -33,11 +30,8 @@ public class NetflixQueRetriever extends NetflixDataRetriever {
 	public String[] getQue(String uri) throws Exception
 	{
 		String url = "http://api.netflix.com/users/" + userId + uri;
-		request = this.createRequest(url);
 		try {
-			signRequest(request);
-			HttpResponse response = client.execute(request);
-			Document xml = loadXMLFromEntity(response.getEntity());
+			Document xml = fetchDocument(url);
 			String[] results = nodeListToArray(xml.getElementsByTagName("title"));
 			return results;
 		} catch (ClientProtocolException e) {

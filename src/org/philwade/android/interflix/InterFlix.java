@@ -30,7 +30,7 @@ public class InterFlix extends Activity {
 		if(uri != null && uri.toString().startsWith(NetflixDataRetriever.APP_URI)) {
 			handleAuthReturn(uri, dataRetriever);
 			authDone = true;
-		  	Toast.makeText(getApplicationContext(), "Thanks for registering", 1000).show();
+		  	Toast.makeText(getApplicationContext(), "Thanks for registering", 2000).show();
 		}
         
         String user_id = prefs.getString("user_id", null);
@@ -41,7 +41,7 @@ public class InterFlix extends Activity {
         
         if(!authDone)
         {
-		  	Toast.makeText(getApplicationContext(), "Welcome to InterFlix. Since you're new, we just need to set you up.", 5000).show();
+		  	Toast.makeText(getApplicationContext(), "Welcome to InterFlix. Since you're new, we just need to set you up.", 8000).show();
         	try {
 				Uri authUri = dataRetriever.requestAuthUri();
 				Intent intent = new Intent(Intent.ACTION_VIEW, authUri);

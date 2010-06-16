@@ -18,23 +18,16 @@ import android.content.SharedPreferences;
 
 public class NetflixSearchRetriever extends NetflixDataRetriever {
 	
-	private HttpGet request = null;
-	private DefaultHttpClient client = null;
-	
 	public NetflixSearchRetriever(SharedPreferences prefs) throws IOException
 	{
 		super(prefs);
-		client = new DefaultHttpClient();
 	}
 	
 	public String[] getSearchTitles(String searchString) throws Exception
 	{
 		String url = "http://api.netflix.com/catalog/titles?term=" + searchString + "&max_results=25"; 
-		request = this.createRequest(url);
-		signRequest(request);
 		try {
-			HttpResponse response = client.execute(request);
-			Document xml = loadXMLFromEntity(response.getEntity());
+			Document xml = fetchDocument(url);
 			String[] results = nodeListToArray(xml.getElementsByTagName("title"));
 			return results;
 		} catch (ClientProtocolException e) {
@@ -49,10 +42,7 @@ public class NetflixSearchRetriever extends NetflixDataRetriever {
 	public NodeList getSearchTitlesNodeList(String searchString) throws Exception
 	{
 		String url = "http://api.netflix.com/catalog/titles?term=" + searchString + "&max_results=25"; 
-		request = this.createRequest(url);
-		signRequest(request);
-		HttpResponse response = client.execute(request);
-		Document xml = loadXMLFromEntity(response.getEntity());
+		Document xml = fetchDocument(url);
 		NodeList results = xml.getElementsByTagName("catalog_title");
 		return results;
 	}
@@ -61,10 +51,7 @@ public class NetflixSearchRetriever extends NetflixDataRetriever {
 	{
 		String url = "http://api.netflix.com/catalog/people?term=" + term + "&max_results=25";
 		try {
-			request = createRequest(url);
-			signRequest(request);
-			HttpResponse response = client.execute(request);
-			Document xml = loadXMLFromEntity(response.getEntity());
+			Document xml = fetchDocument(url);
 			String[] results = peopleNodeHandler(xml.getElementsByTagName("name"));
 			return results;
 		} catch (IOException e) {

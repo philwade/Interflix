@@ -69,30 +69,14 @@ public class NetflixDataRetriever {
     	{
     		consumer.setTokenWithSecret(userToken, userSecret);
     	}
-    	//use prefs to populate consumer correctly here...
     }
     
-    public static Document loadXMLFromEntity(HttpEntity entity) throws Exception
+    public Document fetchDocument(String urlString) throws ParserConfigurationException, SAXException, IOException, OAuthExpectationFailedException, OAuthCommunicationException, OAuthException
     {
-    	BufferedReader in = new BufferedReader(
-    	new InputStreamReader(entity.getContent()));
-    	String inputLine;
-    	StringBuilder xml = new StringBuilder();
-
-    	while ((inputLine = in.readLine()) != null) 
-    		xml.append(inputLine);
-
+    	InputStream stream = fetch(urlString, true);
         DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
         DocumentBuilder builder = factory.newDocumentBuilder();
-        InputSource is = new InputSource(new StringReader(xml.toString()));
-        return builder.parse(is);
-    }
-    
-    public static Document buildDocumentFromInputStream(InputStream is) throws ParserConfigurationException, SAXException, IOException
-    {
-        DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
-        DocumentBuilder builder = factory.newDocumentBuilder();
-        return builder.parse(is);
+        return builder.parse(stream);
     }
     
     public static String[] nodeListToArray(NodeList list)
