@@ -13,11 +13,17 @@ import android.widget.Toast;
 public class TitleActivity extends Activity
 {
 	public NetflixTitle title;
+	public String intentUrl;
 	public void onCreate(Bundle savedInstanceState)
 	{
 		super.onCreate(savedInstanceState);
 		requestWindowFeature(Window.FEATURE_INDETERMINATE_PROGRESS);
 		setContentView(R.layout.title);
+		if(getIntent().hasExtra("idUrl"))
+		{
+			Bundle data = getIntent().getExtras();
+			intentUrl = data.getString("idUrl");
+		}
 		getTitleData();
 	}
 	
@@ -48,7 +54,14 @@ public class TitleActivity extends Activity
 				Document node = null;
 				try{
 					NetflixSearchRetriever searchRetriever = new NetflixSearchRetriever(getSharedPreferences(InterFlix.PREFS_FILE, 0));
-					node = searchRetriever.fetchDocument("http://api.netflix.com/catalog/titles/movies/60021896?expand=synopsis");
+					if(intentUrl != null)
+					{
+						node = searchRetriever.fetchDocument(intentUrl+"?expand=synopsis");
+					}
+					else
+					{
+						node = searchRetriever.fetchDocument("http://api.netflix.com/catalog/titles/movies/60021896?expand=synopsis");
+					}
 				} catch (Exception e) {
 					Toast.makeText(getApplicationContext(), "Unable to retrieve title data", 3000).show();
 				e.printStackTrace();

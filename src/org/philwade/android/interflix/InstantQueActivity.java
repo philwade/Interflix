@@ -2,18 +2,41 @@ package org.philwade.android.interflix;
 
 import org.philwade.android.interflix.R;
 import android.app.ListActivity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
+import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.ListView;
+import android.widget.Toast;
+import android.widget.AdapterView.OnItemClickListener;
 
 public class InstantQueActivity extends ListActivity {
 	public NetflixTitle[] queItems;
 	public void onCreate(Bundle savedInstanceState) {
 		   super.onCreate(savedInstanceState);
 			setListAdapter(new ArrayAdapter<NetflixTitle>(this, R.layout.quelist));
+			ListView lv = getListView();
+			lv.setOnItemClickListener(clickListener);
 			getQueContents();
 		}
 	
+	final OnItemClickListener clickListener = new OnItemClickListener()
+	{
+		@SuppressWarnings("unchecked")
+		public void onItemClick(AdapterView<?> adapterView, View view, int position,
+				long id) {
+			ArrayAdapter<NetflixTitle> adapter = (ArrayAdapter<NetflixTitle>) getListAdapter();
+			NetflixTitle clickedTitle = adapter.getItem(position);
+			Intent viewIntent = new Intent();
+			viewIntent.setClassName("org.philwade.android.interflix", "org.philwade.android.interflix.TitleActivity");
+			viewIntent.putExtra("idUrl", clickedTitle.idUrl);
+			startActivity(viewIntent);
+			//Toast.makeText(getApplicationContext(), clickedTitle.idUrl, 3000).show();
+		}
+		
+	};
 	final Handler queHandler = new Handler();
 	
 	final Runnable updateQue = new Runnable()

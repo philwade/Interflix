@@ -19,6 +19,7 @@ public class NetflixTitle {
 	}
 	public NetflixTitle(Element titleElement)
 	{
+		//TODO: push these assignments into functions so we can handle exceptions better
 		NodeList titles = titleElement.getElementsByTagName("title");
 		NamedNodeMap titleAttributes = titles.item(0).getAttributes();
 		title = titleAttributes.getNamedItem("short").getNodeValue();
@@ -33,7 +34,7 @@ public class NetflixTitle {
 		}
 		NodeList art = titleElement.getElementsByTagName("box_art");
 		Element artEl = (Element) art.item(0);
-		coverArt = artEl.getAttribute("medium");
+		coverArt = artEl.getAttribute("large");
 		NodeList id = titleElement.getElementsByTagName("id");
 		idUrl = id.item(0).getChildNodes().item(0).getNodeValue();
 	}
