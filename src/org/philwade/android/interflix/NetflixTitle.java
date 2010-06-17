@@ -35,8 +35,16 @@ public class NetflixTitle {
 		NodeList art = titleElement.getElementsByTagName("box_art");
 		Element artEl = (Element) art.item(0);
 		coverArt = artEl.getAttribute("large");
-		NodeList id = titleElement.getElementsByTagName("id");
-		idUrl = id.item(0).getChildNodes().item(0).getNodeValue();
+		if(titleElement.getTagName().equals(new String("queue_item")))
+		{
+			NodeList links = titleElement.getElementsByTagName("link");
+			idUrl = extractFromLinks(links, "http://schemas.netflix.com/catalog/title", "rel");
+		}
+		else
+		{
+			NodeList id = titleElement.getElementsByTagName("id");
+			idUrl = id.item(0).getChildNodes().item(0).getNodeValue();
+		}
 	}
 	
 	public String toString()
@@ -44,22 +52,23 @@ public class NetflixTitle {
 		return title;
 	}
 	
-	public void handleLinks(NodeList links)
+	public String extractFromLinks(NodeList links, String attributeValue, String attributeName)
 	{
-		final String synopsisString = new String("synopsis");
+		final String toMatch = new String(attributeValue);
 		int length = links.getLength();
 		for(int i = 0; i < length;i++)
 		{
 			Element el = (Element) links.item(i);
 			//all link nodes should have a title attribute
-			String textLinkTitle = el.getAttribute("title");
+			String textLinkTitle = el.getAttribute(attributeName);
 			
-			if(textLinkTitle.equals(synopsisString))
+			if(textLinkTitle.equals(toMatch))
 			{
-				synopsis = el.getAttribute("href");
-				return;
+				String value = el.getAttribute("href");
+				return value;
 			}
 			
 		}
+		return null;
 	}
 }
