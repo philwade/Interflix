@@ -1,7 +1,10 @@
 package org.philwade.android.interflix;
 
 import org.philwade.android.interflix.R;
+
+import android.app.Dialog;
 import android.app.ListActivity;
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
@@ -13,12 +16,14 @@ import android.widget.Toast;
 import android.widget.AdapterView.OnItemClickListener;
 
 public class InstantQueActivity extends ListActivity {
+	private static final int PROGRESS_DIALOG = 0;
 	public NetflixTitle[] queItems;
 	public void onCreate(Bundle savedInstanceState) {
 		   super.onCreate(savedInstanceState);
 			setListAdapter(new ArrayAdapter<NetflixTitle>(this, R.layout.quelist));
 			ListView lv = getListView();
 			lv.setOnItemClickListener(clickListener);
+			showDialog(PROGRESS_DIALOG);
 			getQueContents();
 		}
 	
@@ -33,7 +38,6 @@ public class InstantQueActivity extends ListActivity {
 			viewIntent.setClassName("org.philwade.android.interflix", "org.philwade.android.interflix.TitleActivity");
 			viewIntent.putExtra("idUrl", clickedTitle.idUrl);
 			startActivity(viewIntent);
-			//Toast.makeText(getApplicationContext(), clickedTitle.idUrl, 3000).show();
 		}
 		
 	};
@@ -44,7 +48,7 @@ public class InstantQueActivity extends ListActivity {
 		@SuppressWarnings("unchecked")
 		public void run() 
 		{
-			getParent().setProgressBarIndeterminateVisibility(false);
+			removeDialog(PROGRESS_DIALOG);
 			if(queItems != null)
 			{
 				ArrayAdapter<NetflixTitle> la = (ArrayAdapter<NetflixTitle>) getListAdapter();
@@ -64,7 +68,6 @@ public class InstantQueActivity extends ListActivity {
 		{
 			public void run()
 			{
-				getParent().setProgressBarIndeterminateVisibility(true);
 				NetflixQueRetriever queRetriever = new NetflixQueRetriever(getSharedPreferences(InterFlix.PREFS_FILE, 0));
 				try {
 					queItems = queRetriever.getInstantQue();
@@ -77,5 +80,19 @@ public class InstantQueActivity extends ListActivity {
 				
 		};
 		t.start();
+	}
+	
+	@Override
+	protected Dialog onCreateDialog(int id)
+	{
+		switch(id)
+		{
+			case PROGRESS_DIALOG:
+				ProgressDialog dialog = new ProgressDialog(this);
+                dialog.setIndeterminate(true);
+                dialog.setCancelable(true);
+                return dialog;
+		}
+		return null;
 	}
 }
