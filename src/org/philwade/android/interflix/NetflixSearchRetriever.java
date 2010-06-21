@@ -6,10 +6,6 @@ import oauth.signpost.exception.OAuthCommunicationException;
 import oauth.signpost.exception.OAuthException;
 import oauth.signpost.exception.OAuthExpectationFailedException;
 
-import org.apache.http.HttpResponse;
-import org.apache.http.client.ClientProtocolException;
-import org.apache.http.client.methods.HttpGet;
-import org.apache.http.impl.client.DefaultHttpClient;
 import org.w3c.dom.Document;
 import org.w3c.dom.NodeList;
 
@@ -23,27 +19,12 @@ public class NetflixSearchRetriever extends NetflixDataRetriever {
 		super(prefs);
 	}
 	
-	public String[] getSearchTitles(String searchString) throws Exception
-	{
-		String url = "http://api.netflix.com/catalog/titles?term=" + searchString + "&max_results=25"; 
-		try {
-			Document xml = fetchDocument(url);
-			String[] results = nodeListToArray(xml.getElementsByTagName("title"));
-			return results;
-		} catch (ClientProtocolException e) {
-			String[] results = {"Unable to retrieve"};
-			return results;
-		} catch (IOException e) {
-			String[] results = {"Unable to retrieve"};
-			return results;
-		}
-	}
-	
-	public NodeList getSearchTitlesNodeList(String searchString) throws Exception
+	public NetflixTitle[] getSearchTitles(String searchString) throws Exception
 	{
 		String url = "http://api.netflix.com/catalog/titles?term=" + searchString + "&max_results=25"; 
 		Document xml = fetchDocument(url);
-		NodeList results = xml.getElementsByTagName("catalog_title");
+		NodeList titleNodes = xml.getElementsByTagName("catalog_title");
+		NetflixTitle[] results = constructTitleObjects(titleNodes);
 		return results;
 	}
 	

@@ -22,6 +22,7 @@ import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.w3c.dom.Document;
+import org.w3c.dom.Element;
 import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
@@ -199,6 +200,19 @@ public class NetflixDataRetriever {
     	
     	return stream;
     }
+    
+    public NetflixTitle[] constructTitleObjects(NodeList list)
+	{
+		int length = list.getLength();
+		NetflixTitle[] titles = new NetflixTitle[length];
+		for(int i = 0; i < length;i++)
+		{
+			Element el = (Element) list.item(i);
+			titles[i] = new NetflixTitle(el);
+		}
+		
+		return titles;
+	}
     
     public void cleanPreferences()
     {

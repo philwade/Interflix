@@ -2,7 +2,6 @@ package org.philwade.android.interflix;
 
 
 import org.w3c.dom.Document;
-import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
 
 import android.content.SharedPreferences;
@@ -33,17 +32,4 @@ public class NetflixQueRetriever extends NetflixDataRetriever {
 		return results;
 	}
 	
-	public NetflixTitle[] constructTitleObjects(NodeList list)
-	{
-		int length = list.getLength();
-		NetflixTitle[] titles = new NetflixTitle[length];
-		for(int i = 0; i < length;i++)
-		{
-			Element el = (Element) list.item(i);
-			titles[i] = new NetflixTitle(el);
-		}
-		
-		return titles;
-	}
-	                    
 }
