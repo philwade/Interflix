@@ -1,6 +1,7 @@
 package org.philwade.android.interflix;
 
 import java.io.IOException;
+import java.net.URLEncoder;
 
 import org.philwade.android.interflix.R;
 
@@ -31,9 +32,11 @@ public class MovieSearch extends QueActivity {
     public OnClickListener searchListen = new OnClickListener()
     {
 		public void onClick(View v) {
+			showDialog(PROGRESS_DIALOG);
 			try {
 				String term = editText.getEditableText().toString();
-				retrieveResults(term);
+				String cleanTerm = URLEncoder.encode(term);
+				retrieveResults(cleanTerm);
 			} catch (Exception e) {
 				Toast.makeText(getApplicationContext(), "Something horrible has happened", 3000).show();
 				e.printStackTrace();

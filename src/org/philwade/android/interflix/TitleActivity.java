@@ -5,6 +5,7 @@ import org.w3c.dom.Document;
 import android.app.Activity;
 import android.os.Bundle;
 import android.os.Handler;
+import android.text.Html;
 import android.view.Window;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -36,7 +37,7 @@ public class TitleActivity extends Activity
 			TextView titleTitle = (TextView) findViewById(R.id.title_title);
 			titleTitle.setText(title.title);
 			TextView titleSynopsis = (TextView) findViewById(R.id.title_synopsis);
-			titleSynopsis.setText(title.synopsis);	
+			titleSynopsis.setText(Html.fromHtml(title.synopsis));	
 			
 			ImageView coverView = (ImageView) findViewById(R.id.title_cover);
 			NetflixDataRetriever retriever = new NetflixDataRetriever(getSharedPreferences(InterFlix.PREFS_FILE, 0));
