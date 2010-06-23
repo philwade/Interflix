@@ -47,11 +47,11 @@ public class TitleActivity extends Activity
 	
 	public void getTitleData()
 	{
+		setProgressBarIndeterminateVisibility(true);
 		Thread t = new Thread()
 		{
 			public void run()
 			{
-				setProgressBarIndeterminateVisibility(true);
 				Document node = null;
 				try{
 					NetflixSearchRetriever searchRetriever = new NetflixSearchRetriever(getSharedPreferences(InterFlix.PREFS_FILE, 0));
