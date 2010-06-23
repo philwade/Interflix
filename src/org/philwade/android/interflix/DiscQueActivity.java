@@ -5,6 +5,7 @@ import org.philwade.android.interflix.R;
 import android.os.Bundle;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import android.widget.Toast;
 
 public class DiscQueActivity extends QueActivity {
 	public void onCreate(Bundle savedInstanceState) {
@@ -14,6 +15,8 @@ public class DiscQueActivity extends QueActivity {
 			lv.setOnItemClickListener(clickListener);
 			showDialog(PROGRESS_DIALOG);
 			getQueContents();
+			NetflixQueRetriever queRetriever = new NetflixQueRetriever(getSharedPreferences(InterFlix.PREFS_FILE, 0));
+			Toast.makeText(getApplicationContext(), queRetriever.getEtag(), 3000);
 	}
 	
 	public void getQueContents()

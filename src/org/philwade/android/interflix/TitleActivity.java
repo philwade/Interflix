@@ -54,7 +54,7 @@ public class TitleActivity extends Activity
 			{
 				Document node = null;
 				try{
-					NetflixSearchRetriever searchRetriever = new NetflixSearchRetriever(getSharedPreferences(InterFlix.PREFS_FILE, 0));
+					NetflixDataRetriever searchRetriever = new NetflixDataRetriever(getSharedPreferences(InterFlix.PREFS_FILE, 0));
 					if(intentUrl != null)
 					{
 						node = searchRetriever.fetchDocument(intentUrl+"?expand=synopsis");
@@ -64,8 +64,7 @@ public class TitleActivity extends Activity
 						node = searchRetriever.fetchDocument("http://api.netflix.com/catalog/titles/movies/60021896?expand=synopsis");
 					}
 				} catch (Exception e) {
-					Toast.makeText(getApplicationContext(), "Unable to retrieve title data", 3000).show();
-				e.printStackTrace();
+					e.printStackTrace();
 				}
 				
 				

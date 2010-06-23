@@ -27,6 +27,9 @@ public class NetflixQueRetriever extends NetflixDataRetriever {
 	{
 		String url = "http://api.netflix.com/users/" + userId + uri;
 		Document xml = fetchDocument(url);
+		NodeList etagList = xml.getElementsByTagName("etag");
+		String etag = etagList.item(0).getChildNodes().item(0).getNodeValue();
+		saveEtag(etag);
 		NodeList titleNodes = xml.getElementsByTagName("queue_item");
 		NetflixTitle[] results = constructTitleObjects(titleNodes);
 		return results;

@@ -105,6 +105,18 @@ public class NetflixDataRetriever {
     	
     }
     
+    public void saveEtag(String etag)
+    {
+    	SharedPreferences.Editor editor = prefs.edit();
+    	editor.putString("etag", etag);
+    	editor.commit();
+    }
+    
+    public String getEtag()
+    {
+    	return prefs.getString("etag", null);
+    }
+    
     public void signRequest(HttpGet request) throws OAuthException, OAuthExpectationFailedException, OAuthCommunicationException
     {
     	consumer.sign(request);
