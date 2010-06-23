@@ -20,6 +20,8 @@ import oauth.signpost.exception.OAuthNotAuthorizedException;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.methods.HttpGet;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.client.methods.HttpRequestBase;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -46,6 +48,8 @@ public class NetflixDataRetriever {
     public static final String NETFLIX_AUTHORIZE_URL = "https://api-user.netflix.com/oauth/login";
     public static final String APPLICATION_NAME = "InterFlix";
     public static final String APP_URI = "interflix-app:///";
+    public static final int HTTP_GET = 0;
+    public static final int HTTP_POST = 1;
     private static final Uri CALLBACK_URI = Uri.parse("interflix-app:///");
     public String userId;
     public String userToken;
@@ -67,9 +71,14 @@ public class NetflixDataRetriever {
     	}
     }
     
-    public Document fetchDocument(String urlString) throws ParserConfigurationException, SAXException, IOException, OAuthExpectationFailedException, OAuthCommunicationException, OAuthException
+    public Document fetchDocument(String urlString) throws OAuthExpectationFailedException, OAuthCommunicationException, ParserConfigurationException, SAXException, IOException, OAuthException
     {
-    	InputStream stream = fetch(urlString, true);
+    	return fetchDocument(urlString, HTTP_GET);
+    }
+    
+    public Document fetchDocument(String urlString, int requestType) throws ParserConfigurationException, SAXException, IOException, OAuthExpectationFailedException, OAuthCommunicationException, OAuthException
+    {
+    	InputStream stream = fetch(urlString, true, requestType);
         DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
         DocumentBuilder builder = factory.newDocumentBuilder();
         return builder.parse(stream);
@@ -117,7 +126,7 @@ public class NetflixDataRetriever {
     	return prefs.getString("etag", null);
     }
     
-    public void signRequest(HttpGet request) throws OAuthException, OAuthExpectationFailedException, OAuthCommunicationException
+    public void signRequest(HttpRequestBase request) throws OAuthException, OAuthExpectationFailedException, OAuthCommunicationException
     {
     	consumer.sign(request);
     }
@@ -195,13 +204,13 @@ public class NetflixDataRetriever {
     
     public InputStream fetch(String urlString) throws ClientProtocolException, OAuthExpectationFailedException, OAuthCommunicationException, IOException, OAuthException
     {
-    	return fetch(urlString, false);
+    	return fetch(urlString, false, HTTP_GET);
     }
     
-    public InputStream fetch(String urlString, boolean signed) throws ClientProtocolException, IOException, OAuthExpectationFailedException, OAuthCommunicationException, OAuthException
+    public InputStream fetch(String urlString, boolean signed, int requestType) throws ClientProtocolException, IOException, OAuthExpectationFailedException, OAuthCommunicationException, OAuthException
     {
     	DefaultHttpClient httpClient = new DefaultHttpClient();
-    	HttpGet request = new HttpGet(urlString);
+    	HttpRequestBase request = getRequest(urlString, requestType);
     	
     	if(signed)
     	{
@@ -211,6 +220,18 @@ public class NetflixDataRetriever {
     	InputStream stream = response.getEntity().getContent();
     	
     	return stream;
+    }
+    
+    public HttpRequestBase getRequest(String urlString, int request_type)
+    {
+    	switch(request_type)
+    	{
+    		case HTTP_GET:
+    			return new HttpGet(urlString);
+    		case HTTP_POST:
+    			return new HttpPost(urlString);
+    	}
+    	return null;
     }
     
     public NetflixTitle[] constructTitleObjects(NodeList list)
