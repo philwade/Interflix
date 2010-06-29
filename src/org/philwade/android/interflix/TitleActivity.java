@@ -1,20 +1,33 @@
 package org.philwade.android.interflix;
 
+import java.io.IOException;
+
+import javax.xml.parsers.ParserConfigurationException;
+
+import oauth.signpost.exception.OAuthCommunicationException;
+import oauth.signpost.exception.OAuthException;
+import oauth.signpost.exception.OAuthExpectationFailedException;
+
+import org.apache.http.client.ClientProtocolException;
 import org.w3c.dom.Document;
+import org.xml.sax.SAXException;
 
 import android.app.Activity;
 import android.os.Bundle;
 import android.os.Handler;
 import android.text.Html;
+import android.view.View;
 import android.view.Window;
+import android.view.View.OnClickListener;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 public class TitleActivity extends Activity
 {
 	public NetflixTitle title;
 	public String intentUrl;
+	public Button queButton;
 	public void onCreate(Bundle savedInstanceState)
 	{
 		super.onCreate(savedInstanceState);
@@ -25,6 +38,8 @@ public class TitleActivity extends Activity
 			Bundle data = getIntent().getExtras();
 			intentUrl = data.getString("idUrl");
 		}
+		queButton = (Button) findViewById(R.id.addQueue);
+		queButton.setOnClickListener(addListener);
 		getTitleData();
 	}
 	
@@ -78,4 +93,38 @@ public class TitleActivity extends Activity
 		
 		t.start();
 	}
+	
+	public OnClickListener addListener = new OnClickListener()
+	{
+
+		public void onClick(View v) {
+			NetflixDataRetriever retriever = new NetflixDataRetriever(getSharedPreferences(InterFlix.PREFS_FILE, 0));
+			try {
+				retriever.addToQue(title.idUrl);
+			} catch (ClientProtocolException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (OAuthExpectationFailedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (OAuthCommunicationException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (OAuthException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			catch (ParserConfigurationException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (SAXException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			
+		}
+	};
 }

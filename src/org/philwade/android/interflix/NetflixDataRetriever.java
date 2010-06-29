@@ -2,6 +2,14 @@ package org.philwade.android.interflix;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.UnsupportedEncodingException;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.Map.Entry;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -18,11 +26,15 @@ import oauth.signpost.exception.OAuthMessageSignerException;
 import oauth.signpost.exception.OAuthNotAuthorizedException;
 
 import org.apache.http.HttpResponse;
+import org.apache.http.NameValuePair;
 import org.apache.http.client.ClientProtocolException;
+import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.client.methods.HttpRequestBase;
 import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.http.message.BasicNameValuePair;
+import org.apache.http.protocol.HTTP;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NamedNodeMap;
@@ -73,12 +85,12 @@ public class NetflixDataRetriever {
     
     public Document fetchDocument(String urlString) throws OAuthExpectationFailedException, OAuthCommunicationException, ParserConfigurationException, SAXException, IOException, OAuthException
     {
-    	return fetchDocument(urlString, HTTP_GET);
+    	return fetchDocument(urlString, HTTP_GET, null);
     }
     
-    public Document fetchDocument(String urlString, int requestType) throws ParserConfigurationException, SAXException, IOException, OAuthExpectationFailedException, OAuthCommunicationException, OAuthException
+    public Document fetchDocument(String urlString, int requestType, HashMap<String, String> parameters) throws ParserConfigurationException, SAXException, IOException, OAuthExpectationFailedException, OAuthCommunicationException, OAuthException
     {
-    	InputStream stream = fetch(urlString, true, requestType);
+    	InputStream stream = fetch(urlString, true, requestType, parameters);
         DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
         DocumentBuilder builder = factory.newDocumentBuilder();
         return builder.parse(stream);
@@ -204,13 +216,18 @@ public class NetflixDataRetriever {
     
     public InputStream fetch(String urlString) throws ClientProtocolException, OAuthExpectationFailedException, OAuthCommunicationException, IOException, OAuthException
     {
-    	return fetch(urlString, false, HTTP_GET);
+    	return fetch(urlString, false, HTTP_GET, null);
     }
     
-    public InputStream fetch(String urlString, boolean signed, int requestType) throws ClientProtocolException, IOException, OAuthExpectationFailedException, OAuthCommunicationException, OAuthException
+    public InputStream fetch(String urlString, boolean signed, int requestType, HashMap<String, String> parameters) throws ClientProtocolException, IOException, OAuthExpectationFailedException, OAuthCommunicationException, OAuthException
     {
     	DefaultHttpClient httpClient = new DefaultHttpClient();
     	HttpRequestBase request = getRequest(urlString, requestType);
+    	
+    	if(parameters != null)
+    	{
+    		addPostParams((HttpPost) request, parameters);
+    	}
     	
     	if(signed)
     	{
@@ -220,6 +237,24 @@ public class NetflixDataRetriever {
     	InputStream stream = response.getEntity().getContent();
     	
     	return stream;
+    }
+    
+    @SuppressWarnings("unchecked")
+	private void addPostParams(HttpPost request, HashMap<String, String> params) throws UnsupportedEncodingException
+    {
+    	Set param_set = params.entrySet();
+    	Iterator i = param_set.iterator();
+    	List <NameValuePair> nvps = new ArrayList <NameValuePair>();
+        nvps.add(new BasicNameValuePair("IDToken2", "password"));
+
+
+    	while(i.hasNext())
+    	{
+    		Map.Entry<String, String> entry = (Entry) i.next();
+    		nvps.add(new BasicNameValuePair(entry.getKey(), entry.getValue()));
+    	}
+    	
+        request.setEntity(new UrlEncodedFormEntity(nvps, HTTP.UTF_8));
     }
     
     public HttpRequestBase getRequest(String urlString, int request_type)
@@ -257,6 +292,15 @@ public class NetflixDataRetriever {
     	editor.putString("oauth_token_secret", null);
     	editor.commit();
     }
+
+	public void addToQue(String idUrl) throws ClientProtocolException, OAuthExpectationFailedException, OAuthCommunicationException, IOException, OAuthException, ParserConfigurationException, SAXException {
+		String url = "http://api.netflix.com/users/" + userId + "/queues/disc";
+		HashMap<String, String> parameters = new HashMap<String, String>();
+		parameters.put("title_ref", idUrl);
+		parameters.put("etag", prefs.getString("etag", null));
+		Document d = fetchDocument(url, HTTP_POST, parameters);
+		String test = "just need a breakpoint in here";
+	}
     
     
 }
