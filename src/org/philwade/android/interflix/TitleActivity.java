@@ -42,6 +42,7 @@ public class TitleActivity extends Activity
 			intentUrl = data.getString("idUrl");
 		}
 		instantQueButton = (Button) findViewById(R.id.addInstantQueue);
+		instantQueButton.setOnClickListener(instantAddListener);
 		queButton = (Button) findViewById(R.id.addQueue);
 		queButton.setOnClickListener(addListener);
 		inDVDQText = (TextView) findViewById(R.id.inq_text);
@@ -50,6 +51,7 @@ public class TitleActivity extends Activity
 	}
 	
 	final Handler titleHandler = new Handler();
+	final Handler queAddHandler = new Handler();
 	
 	final Runnable fillInTitle = new Runnable()
 	{
@@ -118,35 +120,17 @@ public class TitleActivity extends Activity
 	
 	public OnClickListener addListener = new OnClickListener()
 	{
-
 		public void onClick(View v) {
 			NetflixDataRetriever retriever = new NetflixDataRetriever(getSharedPreferences(InterFlix.PREFS_FILE, 0));
-			try {
-				retriever.addToQue(title.idUrl);
-			} catch (ClientProtocolException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			} catch (OAuthExpectationFailedException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			} catch (OAuthCommunicationException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			} catch (OAuthException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-			catch (ParserConfigurationException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			} catch (SAXException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-			
+			title.addToDVDQue(retriever);
+		}
+	};
+	
+	public OnClickListener instantAddListener = new OnClickListener()
+	{
+		public void onClick(View v) {
+			NetflixDataRetriever retriever = new NetflixDataRetriever(getSharedPreferences(InterFlix.PREFS_FILE, 0));
+			title.addToInstantQue(retriever);
 		}
 	};
 }

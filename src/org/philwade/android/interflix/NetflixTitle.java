@@ -1,9 +1,19 @@
 package org.philwade.android.interflix;
 
+import java.io.IOException;
+
+import javax.xml.parsers.ParserConfigurationException;
+
+import oauth.signpost.exception.OAuthCommunicationException;
+import oauth.signpost.exception.OAuthException;
+import oauth.signpost.exception.OAuthExpectationFailedException;
+
+import org.apache.http.client.ClientProtocolException;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.NodeList;
+import org.xml.sax.SAXException;
 
 public class NetflixTitle {
 
@@ -11,10 +21,10 @@ public class NetflixTitle {
 	public String coverArt;
 	public String synopsis;
 	public String idUrl;
-	public boolean instant = false;
+	public boolean instant = true;
 	public boolean disc = true;
 	public boolean inDVDQ = false;
-	public boolean inInstantQ = true;
+	public boolean inInstantQ = false;
 	public int id;
 	
 	public NetflixTitle(Document rootElement)
@@ -94,5 +104,72 @@ public class NetflixTitle {
 	public boolean inInstantQ()
 	{
 		return inInstantQ;
+	}
+	
+	public boolean addToInstantQue(NetflixDataRetriever retriever)
+	{
+		if(!inInstantQ() && instantAvailable())
+		{
+			try {
+				retriever.addToInstantQue(idUrl);
+				return true;
+			} catch (ClientProtocolException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (OAuthExpectationFailedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (OAuthCommunicationException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (OAuthException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (ParserConfigurationException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (SAXException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			return false;
+		}
+		return false;
+	}
+	
+	public boolean addToDVDQue(NetflixDataRetriever retriever)
+	{
+		if(!inDVDQ() && discAvailable())
+		{
+			try {
+				retriever.addToDVDQue(idUrl);
+				return true;
+			} catch (ClientProtocolException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (OAuthExpectationFailedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (OAuthCommunicationException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (OAuthException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (ParserConfigurationException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (SAXException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		return false;
 	}
 }
