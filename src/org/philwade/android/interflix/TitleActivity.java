@@ -100,7 +100,7 @@ public class TitleActivity extends Activity
 					}
 					else
 					{
-						node = searchRetriever.fetchDocument("http://api.netflix.com/catalog/titles/movies/60021896?expand=synopsis");
+						node = searchRetriever.fetchDocument("http://api.netflix.com/catalog/titles/movies/60021896?expand=synopsis,formats");
 					}
 				} catch (Exception e) {
 					e.printStackTrace();

@@ -39,6 +39,7 @@ public class NetflixTitle {
 		title = titleAttributes.getNamedItem("short").getNodeValue();
 		
 		NodeList synopsees = titleElement.getElementsByTagName("synopsis");
+		NodeList formats = titleElement.getElementsByTagName("delivery_formats");
 		try
 		{
 			synopsis = synopsees.item(0).getChildNodes().item(0).getNodeValue();
