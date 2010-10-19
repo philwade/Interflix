@@ -17,4 +17,8 @@
     </string-array>
     <string name="autocomplete_url">http://api.netflix.com/catalog/titles/autocomplete</string>
     <string name="search_title">I\'m going to be search someday</string>
+    <string name="inq_text">In DVD Que</string>
+    <string name="inq_instant_text">In Instant Que</string>
+    <string name="addq_instant_text">Add to Instant Que</string>
+    <string name="addq_dvd_text">Add to DVD Que</string>
 </resources>

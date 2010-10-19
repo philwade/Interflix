@@ -11,6 +11,10 @@ public class NetflixTitle {
 	public String coverArt;
 	public String synopsis;
 	public String idUrl;
+	public boolean instant = false;
+	public boolean disc = true;
+	public boolean inDVDQ = false;
+	public boolean inInstantQ = true;
 	public int id;
 	
 	public NetflixTitle(Document rootElement)
@@ -70,5 +74,25 @@ public class NetflixTitle {
 			
 		}
 		return null;
+	}
+	
+	public boolean instantAvailable()
+	{
+		return instant;
+	}
+	
+	public boolean discAvailable()
+	{
+		return disc;
+	}
+	
+	public boolean inDVDQ()
+	{
+		return inDVDQ;
+	}
+	
+	public boolean inInstantQ()
+	{
+		return inInstantQ;
 	}
 }

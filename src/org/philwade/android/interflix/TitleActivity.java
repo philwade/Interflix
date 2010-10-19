@@ -28,6 +28,9 @@ public class TitleActivity extends Activity
 	public NetflixTitle title;
 	public String intentUrl;
 	public Button queButton;
+	public Button instantQueButton;
+	public TextView inDVDQText;
+	public TextView inInstantQText;
 	public void onCreate(Bundle savedInstanceState)
 	{
 		super.onCreate(savedInstanceState);
@@ -38,8 +41,11 @@ public class TitleActivity extends Activity
 			Bundle data = getIntent().getExtras();
 			intentUrl = data.getString("idUrl");
 		}
+		instantQueButton = (Button) findViewById(R.id.addInstantQueue);
 		queButton = (Button) findViewById(R.id.addQueue);
 		queButton.setOnClickListener(addListener);
+		inDVDQText = (TextView) findViewById(R.id.inq_text);
+		inInstantQText = (TextView) findViewById(R.id.inq_instant_text);
 		getTitleData();
 	}
 	
@@ -57,6 +63,22 @@ public class TitleActivity extends Activity
 			ImageView coverView = (ImageView) findViewById(R.id.title_cover);
 			NetflixDataRetriever retriever = new NetflixDataRetriever(getSharedPreferences(InterFlix.PREFS_FILE, 0));
 			retriever.fetchImageOnThread(title.coverArt, coverView);
+			if(title.inDVDQ())
+			{
+				inDVDQText.setVisibility(View.VISIBLE);
+			}
+			else
+			{
+				queButton.setEnabled(title.discAvailable());
+			}
+			if(title.inInstantQ())
+			{
+				inInstantQText.setVisibility(View.VISIBLE);
+			}
+			else
+			{
+				instantQueButton.setEnabled(title.instantAvailable());
+			}
 		}
 	};
 	

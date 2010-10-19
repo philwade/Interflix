@@ -24,11 +24,37 @@
     			android:id="@+id/title_synopsis"
     			android:textSize="16sp" 
     			android:layout_below="@id/title_title" />
+    			<TextView  
+				android:id="@+id/inq_text"
+				android:textSize="15pt"
+				android:textColor="#BA2828"
+    			android:layout_width="fill_parent" 
+    			android:layout_height="wrap_content" 
+    			android:text="@string/inq_text"
+    			android:visibility="invisible"
+    			/>
+    			<TextView  
+				android:id="@+id/inq_instant_text"
+				android:textSize="15pt"
+				android:textColor="#355B81"
+    			android:layout_width="fill_parent" 
+    			android:layout_height="wrap_content" 
+    			android:text="@string/inq_instant_text"
+    			android:visibility="invisible"
+    			/>
     			<Button xmlns:android="http://schemas.android.com/apk/res/android"
     			android:layout_width="fill_parent"
     			android:layout_height="wrap_content"
-    			android:text="Add to queue"
+    			android:text="@string/addq_dvd_text"
     			android:id="@+id/addQueue"
+    			android:enabled="false"
+    			/>
+    			<Button xmlns:android="http://schemas.android.com/apk/res/android"
+    			android:layout_width="fill_parent"
+    			android:layout_height="wrap_content"
+    			android:text="@string/addq_instant_text"
+    			android:id="@+id/addInstantQueue"
+    			android:enabled="false"
     			/>
 	</LinearLayout>
 </ScrollView>
