@@ -96,10 +96,11 @@ public class TitleActivity extends Activity
 					NetflixDataRetriever searchRetriever = new NetflixDataRetriever(getSharedPreferences(InterFlix.PREFS_FILE, 0));
 					if(intentUrl != null)
 					{
-						node = searchRetriever.fetchDocument(intentUrl+"?expand=synopsis");
+						node = searchRetriever.fetchDocument(intentUrl+"?expand=synopsis,formats");
 					}
 					else
 					{
+						//TODO remove this as it is for testing
 						node = searchRetriever.fetchDocument("http://api.netflix.com/catalog/titles/movies/60021896?expand=synopsis,formats");
 					}
 				} catch (Exception e) {
