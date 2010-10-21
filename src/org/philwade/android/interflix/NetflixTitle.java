@@ -21,8 +21,8 @@ public class NetflixTitle {
 	public String coverArt;
 	public String synopsis;
 	public String idUrl;
-	public boolean instant = true;
-	public boolean disc = true;
+	public boolean instant = false;
+	public boolean disc = false;
 	public boolean inDVDQ = false;
 	public boolean inInstantQ = false;
 	public int id;
@@ -40,6 +40,9 @@ public class NetflixTitle {
 		
 		NodeList synopsees = titleElement.getElementsByTagName("synopsis");
 		NodeList formats = titleElement.getElementsByTagName("delivery_formats");
+		
+		checkAvailablilty(formats);
+		
 		try
 		{
 			synopsis = synopsees.item(0).getChildNodes().item(0).getNodeValue();
@@ -172,5 +175,33 @@ public class NetflixTitle {
 			}
 		}
 		return false;
+	}
+	
+	private void availabiltyEquals(Element el)
+	{
+		String label = el.getAttribute("label");
+		if(label.equals("DVD"))
+		{
+			this.disc = true;
+		}
+		if(label.equals("instant"))
+		{
+			this.instant = true;
+		}
+	}
+	private void checkAvailablilty(NodeList formats)
+	{
+		try
+		{
+			Element avail1 = (Element) formats.item(0).getChildNodes().item(0).getChildNodes().item(0);
+			availabiltyEquals(avail1);
+		}catch(NullPointerException e){
+		}
+		try
+		{
+			Element avail2 = (Element) formats.item(0).getChildNodes().item(1).getChildNodes().item(0);
+			availabiltyEquals(avail2);
+		}catch(NullPointerException e){
+		}	
 	}
 }
