@@ -95,6 +95,7 @@ public class NetflixTitle {
 	{
 		try {
 			Document d = retriever.getTitleState(idUrl);
+			NodeList statuses = d.getElementsByTagName("title_state_item");
 			queStatuChecked = true;
 		} catch (OAuthExpectationFailedException e) {
 			// TODO Auto-generated catch block
