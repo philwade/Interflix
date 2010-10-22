@@ -25,6 +25,7 @@ public class NetflixTitle {
 	public boolean disc = false;
 	public boolean inDVDQ;
 	public boolean inInstantQ;
+	public boolean queStatuChecked = false;
 	public int id;
 	
 	public NetflixTitle(Document rootElement)
@@ -94,7 +95,7 @@ public class NetflixTitle {
 	{
 		try {
 			Document d = retriever.getTitleState(idUrl);
-			String c = "breakpoint";
+			queStatuChecked = true;
 		} catch (OAuthExpectationFailedException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -125,19 +126,27 @@ public class NetflixTitle {
 		return disc;
 	}
 	
-	public boolean inDVDQ()
+	public boolean inDVDQ(NetflixDataRetriever retriever)
 	{
+		if(queStatuChecked == false)
+		{
+			checkQueueStatus(retriever);
+		}
 		return inDVDQ;
 	}
 	
-	public boolean inInstantQ()
+	public boolean inInstantQ(NetflixDataRetriever retriever)
 	{
+		if(queStatuChecked == false)
+		{
+			checkQueueStatus(retriever);
+		}
 		return inInstantQ;
 	}
 	
 	public boolean addToInstantQue(NetflixDataRetriever retriever)
 	{
-		if(!inInstantQ() && instantAvailable())
+		if(!inInstantQ(retriever) && instantAvailable())
 		{
 			try {
 				retriever.addToInstantQue(idUrl);
@@ -171,7 +180,7 @@ public class NetflixTitle {
 	
 	public boolean addToDVDQue(NetflixDataRetriever retriever)
 	{
-		if(!inDVDQ() && discAvailable())
+		if(!inDVDQ(retriever) && discAvailable())
 		{
 			try {
 				retriever.addToDVDQue(idUrl);

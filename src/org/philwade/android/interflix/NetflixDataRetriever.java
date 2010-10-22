@@ -314,10 +314,8 @@ public class NetflixDataRetriever {
 	
 	public Document getTitleState(String titleUrl) throws OAuthExpectationFailedException, OAuthCommunicationException, ParserConfigurationException, SAXException, IOException, OAuthException
 	{
-		String url = "http://api.netflix.com/users/" + userId + "/title_states";
-		HashMap<String, String> parameters = new HashMap<String, String>();
-		parameters.put("title_refs", titleUrl);
-		Document d = fetchDocument(url, HTTP_POST, parameters);
+		String url = "http://api.netflix.com/users/" + userId + "/title_states?title_refs=" + titleUrl;
+		Document d = fetchDocument(url);
 		return d;
 	}
 }

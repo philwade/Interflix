@@ -65,7 +65,7 @@ public class TitleActivity extends Activity
 			ImageView coverView = (ImageView) findViewById(R.id.title_cover);
 			NetflixDataRetriever retriever = new NetflixDataRetriever(getSharedPreferences(InterFlix.PREFS_FILE, 0));
 			retriever.fetchImageOnThread(title.coverArt, coverView);
-			if(title.inDVDQ())
+			if(title.inDVDQ(retriever))
 			{
 				inDVDQText.setVisibility(View.VISIBLE);
 			}
@@ -73,7 +73,7 @@ public class TitleActivity extends Activity
 			{
 				queButton.setEnabled(title.discAvailable());
 			}
-			if(title.inInstantQ())
+			if(title.inInstantQ(retriever))
 			{
 				inInstantQText.setVisibility(View.VISIBLE);
 			}
