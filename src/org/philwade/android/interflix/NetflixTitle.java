@@ -23,8 +23,8 @@ public class NetflixTitle {
 	public String idUrl;
 	public boolean instant = false;
 	public boolean disc = false;
-	public boolean inDVDQ = false;
-	public boolean inInstantQ = false;
+	public boolean inDVDQ;
+	public boolean inInstantQ;
 	public int id;
 	
 	public NetflixTitle(Document rootElement)
@@ -90,6 +90,31 @@ public class NetflixTitle {
 		return null;
 	}
 	
+	private void checkQueueStatus(NetflixDataRetriever retriever)
+	{
+		try {
+			Document d = retriever.getTitleState(idUrl);
+			String c = "breakpoint";
+		} catch (OAuthExpectationFailedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (OAuthCommunicationException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (ParserConfigurationException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (SAXException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (OAuthException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
 	public boolean instantAvailable()
 	{
 		return instant;

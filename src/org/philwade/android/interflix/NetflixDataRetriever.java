@@ -311,4 +311,13 @@ public class NetflixDataRetriever {
 	public void addToDVDQue(String idUrl) throws ClientProtocolException, OAuthExpectationFailedException, OAuthCommunicationException, IOException, OAuthException, ParserConfigurationException, SAXException {
 		addToQue(idUrl, DISC_QUE_URI);
 	}
+	
+	public Document getTitleState(String titleUrl) throws OAuthExpectationFailedException, OAuthCommunicationException, ParserConfigurationException, SAXException, IOException, OAuthException
+	{
+		String url = "http://api.netflix.com/users/" + userId + "/title_states";
+		HashMap<String, String> parameters = new HashMap<String, String>();
+		parameters.put("title_refs", titleUrl);
+		Document d = fetchDocument(url, HTTP_POST, parameters);
+		return d;
+	}
 }
