@@ -25,7 +25,7 @@ public class NetflixTitle {
 	public boolean disc = false;
 	public boolean inDVDQ;
 	public boolean inInstantQ;
-	public boolean queStatuChecked = false;
+	public boolean queStatusChecked = false;
 	public int id;
 	
 	public NetflixTitle(Document rootElement)
@@ -91,12 +91,52 @@ public class NetflixTitle {
 		return null;
 	}
 	
+	private void setQueStatusFromCategory(Element category, Element statusValue)
+	{
+		String itemType = category.getAttribute("label");
+		
+		if(statusValue == null)
+		{
+			//find out type and say we got nothin
+			if(itemType.equals("DVD"))
+			{
+				inDVDQ = false;
+			}
+			if(itemType.equals("Instant"))
+			{
+				inInstantQ = false;
+			}
+		}
+		else
+		{
+			if(statusValue.getAttribute("label").equals("In Queue"))
+			{
+				if(itemType.equals("DVD"))
+				{
+					inDVDQ = true;
+				}
+				if(itemType.equals("Instant"))
+				{
+					inInstantQ = true;
+				}
+			}
+		}
+	}
 	private void checkQueueStatus(NetflixDataRetriever retriever)
 	{
 		try {
 			Document d = retriever.getTitleState(idUrl);
-			NodeList statuses = d.getElementsByTagName("title_state_item");
-			queStatuChecked = true;
+			NodeList statuses = d.getElementsByTagName("format");
+			int statusLength = statuses.getLength();
+			
+			for(int i = 0; i < statusLength;i++)
+			{
+				Element status = (Element) statuses.item(i);
+				Element category = (Element) status.getElementsByTagName("category").item(0); //get first element, check on sibilings
+				Element categoryStatus = (Element) status.getElementsByTagName("category").item(1); //get first element, check on sibilings
+				setQueStatusFromCategory(category, categoryStatus);
+			}
+			queStatusChecked = true;
 		} catch (OAuthExpectationFailedException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -129,7 +169,7 @@ public class NetflixTitle {
 	
 	public boolean inDVDQ(NetflixDataRetriever retriever)
 	{
-		if(queStatuChecked == false)
+		if(queStatusChecked == false)
 		{
 			checkQueueStatus(retriever);
 		}
@@ -138,7 +178,7 @@ public class NetflixTitle {
 	
 	public boolean inInstantQ(NetflixDataRetriever retriever)
 	{
-		if(queStatuChecked == false)
+		if(queStatusChecked == false)
 		{
 			checkQueueStatus(retriever);
 		}
