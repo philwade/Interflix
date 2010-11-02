@@ -15,6 +15,7 @@ import android.view.View.OnClickListener;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.Toast;
 import android.widget.AdapterView.AdapterContextMenuInfo;
 import android.widget.AdapterView.OnItemClickListener;
 
@@ -103,15 +104,21 @@ public abstract class QueActivity extends ListActivity {
 		inflater.inflate(R.menu.title_context, menu);
 	}
 	
+	@SuppressWarnings("unchecked")
 	@Override
 	public boolean onContextItemSelected(MenuItem item) {
 	  AdapterContextMenuInfo info = (AdapterContextMenuInfo) item.getMenuInfo();
+	  ArrayAdapter<NetflixTitle> adapter = (ArrayAdapter<NetflixTitle>) getListAdapter();
+	  NetflixTitle clickedTitle = adapter.getItem(info.position);
+	  NetflixQueRetriever queRetriever = new NetflixQueRetriever(getSharedPreferences(InterFlix.PREFS_FILE, 0));
 	  switch (item.getItemId()) {
 	  case R.id.item_remove:
 		  //TODO: get the item, then kill it! also, refresh que
+		  clickedTitle.removeFromQue(queRetriever);
 	    return true;
 	  case R.id.item_move:
 		  //TODO: write up the position change code
+		  Toast.makeText(getApplicationContext(), "This button isn't implemented yet", 1000).show();
 	    return true;
 	  default:
 	    return super.onContextItemSelected(item);

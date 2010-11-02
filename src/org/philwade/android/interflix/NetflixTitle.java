@@ -264,6 +264,7 @@ public class NetflixTitle {
 			this.instant = true;
 		}
 	}
+	
 	private void checkAvailablilty(NodeList formats)
 	{
 		try
@@ -278,5 +279,10 @@ public class NetflixTitle {
 			availabiltyEquals(avail2);
 		}catch(NullPointerException e){
 		}	
+	}
+	
+	public boolean removeFromQue(NetflixDataRetriever retriever)
+	{
+		return true;
 	}
 }
