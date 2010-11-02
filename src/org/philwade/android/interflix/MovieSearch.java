@@ -14,6 +14,7 @@ import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.Toast;
 
+//TODO: this maybe shouldn't extend QueActivity
 public class MovieSearch extends QueActivity {
 	public Button okButton;
 	public ListView lv;
@@ -66,6 +67,12 @@ public class MovieSearch extends QueActivity {
 				
 		};
 		t.start();
+	}
+
+	@Override
+	void getQueContents() {
+		// TODO Auto-generated method stub
+		
 	}
     
 }

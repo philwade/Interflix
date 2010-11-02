@@ -62,6 +62,7 @@ public class NetflixDataRetriever {
     public static final String APP_URI = "interflix-app:///";
     public static final int HTTP_GET = 0;
     public static final int HTTP_POST = 1;
+    public static final int OFFSET_INCREMENT = 25;
     private static final Uri CALLBACK_URI = Uri.parse("interflix-app:///");
     private static final String INSTANT_QUE_URI = "/queues/instant";
     private static final String DISC_QUE_URI = "/queues/disc";
