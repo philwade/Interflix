@@ -6,11 +6,16 @@ import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
+import android.view.ContextMenu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
+import android.view.ContextMenu.ContextMenuInfo;
 import android.view.View.OnClickListener;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.AdapterView.AdapterContextMenuInfo;
 import android.widget.AdapterView.OnItemClickListener;
 
 public abstract class QueActivity extends ListActivity {
@@ -26,6 +31,7 @@ public abstract class QueActivity extends ListActivity {
 		   moreButton.setText(R.string.load_more_text);
 		   moreButton.setId(LOAD_MORE_ID);
 		   moreButton.setOnClickListener(moreListener);
+		   registerForContextMenu(getListView());
 	}
 	
 	final Handler queHandler = new Handler();
@@ -38,6 +44,12 @@ public abstract class QueActivity extends ListActivity {
 			removeDialog(PROGRESS_DIALOG);
 			if(queItems != null)
 			{
+				if(queItems.length < NetflixDataRetriever.OFFSET_INCREMENT)
+				{
+					//when we get less than we asked for, turn off button
+					moreButton.setEnabled(false);
+					//TODO: find a better way to know when we hit bottom
+				}
 				ArrayAdapter<NetflixTitle> la = (ArrayAdapter<NetflixTitle>) getListAdapter();
 				if(firstLoad == true)
 				{
@@ -81,6 +93,29 @@ public abstract class QueActivity extends ListActivity {
                 return dialog;
 		}
 		return null;
+	}
+	
+	@Override
+	public void onCreateContextMenu(ContextMenu menu, View v, ContextMenuInfo menuInfo)
+	{
+		super.onCreateContextMenu(menu, v, menuInfo);
+		MenuInflater inflater = getMenuInflater();
+		inflater.inflate(R.menu.title_context, menu);
+	}
+	
+	@Override
+	public boolean onContextItemSelected(MenuItem item) {
+	  AdapterContextMenuInfo info = (AdapterContextMenuInfo) item.getMenuInfo();
+	  switch (item.getItemId()) {
+	  case R.id.item_remove:
+		  //TODO: get the item, then kill it! also, refresh que
+	    return true;
+	  case R.id.item_move:
+		  //TODO: write up the position change code
+	    return true;
+	  default:
+	    return super.onContextItemSelected(item);
+	  }
 	}
 	
 	abstract void getQueContents();

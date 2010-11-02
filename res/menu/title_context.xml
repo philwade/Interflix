@@ -1,0 +1,4 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+	<item android:title="Remove from Que" android:id="@+id/item_remove" android:visible="true"></item>
+	<item android:title="Change position" android:id="@+id/item_move" android:visible="true"></item>
+</menu>
