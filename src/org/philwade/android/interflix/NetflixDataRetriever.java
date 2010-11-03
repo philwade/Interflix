@@ -65,6 +65,7 @@ public class NetflixDataRetriever {
     public static final int HTTP_POST = 1;
     public static final int HTTP_DELETE = 2;
     public static final int OFFSET_INCREMENT = 25;
+    public static final int NO_POSITION = -1;
     private static final Uri CALLBACK_URI = Uri.parse("interflix-app:///");
     private static final String INSTANT_QUE_URI = "/queues/instant";
     private static final String DISC_QUE_URI = "/queues/disc";
@@ -300,13 +301,22 @@ public class NetflixDataRetriever {
     	editor.commit();
     }
 
-	public void addToQue(String idUrl, String queUrl) throws ClientProtocolException, OAuthExpectationFailedException, OAuthCommunicationException, IOException, OAuthException, ParserConfigurationException, SAXException {
+	
+	public void addToQue(String idUrl, String queUrl, int position) throws ClientProtocolException, OAuthExpectationFailedException, OAuthCommunicationException, IOException, OAuthException, ParserConfigurationException, SAXException {
 		String url = "http://api.netflix.com/users/" + userId + queUrl;
 		HashMap<String, String> parameters = new HashMap<String, String>();
 		parameters.put("title_ref", idUrl);
 		parameters.put("etag", prefs.getString("etag", null));
+		if(position != NO_POSITION)
+		{
+			parameters.put("position", Integer.toString(position));
+		}
 		Document d = fetchDocument(url, HTTP_POST, parameters);
 		String test = "just need a breakpoint in here";
+	}
+	
+	public void addToQue(String idUrl, String queUrl) throws ClientProtocolException, OAuthExpectationFailedException, OAuthCommunicationException, IOException, OAuthException, ParserConfigurationException, SAXException {
+		addToQue(idUrl, queUrl, NO_POSITION);
 	}
     
 	public void addToInstantQue(String idUrl) throws ClientProtocolException, OAuthExpectationFailedException, OAuthCommunicationException, IOException, OAuthException, ParserConfigurationException, SAXException {
