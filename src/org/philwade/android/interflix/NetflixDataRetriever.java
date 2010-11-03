@@ -31,6 +31,7 @@ import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
+import org.apache.http.client.methods.HttpDelete;
 import org.apache.http.client.methods.HttpRequestBase;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.message.BasicNameValuePair;
@@ -62,6 +63,7 @@ public class NetflixDataRetriever {
     public static final String APP_URI = "interflix-app:///";
     public static final int HTTP_GET = 0;
     public static final int HTTP_POST = 1;
+    public static final int HTTP_DELETE = 2;
     public static final int OFFSET_INCREMENT = 25;
     private static final Uri CALLBACK_URI = Uri.parse("interflix-app:///");
     private static final String INSTANT_QUE_URI = "/queues/instant";
@@ -268,6 +270,8 @@ public class NetflixDataRetriever {
     			return new HttpGet(urlString);
     		case HTTP_POST:
     			return new HttpPost(urlString);
+    		case HTTP_DELETE:
+    			return new HttpDelete(urlString);
     	}
     	return null;
     }
@@ -311,6 +315,11 @@ public class NetflixDataRetriever {
     
 	public void addToDVDQue(String idUrl) throws ClientProtocolException, OAuthExpectationFailedException, OAuthCommunicationException, IOException, OAuthException, ParserConfigurationException, SAXException {
 		addToQue(idUrl, DISC_QUE_URI);
+	}
+	
+	public void removeFromQue(String id) throws ClientProtocolException, OAuthExpectationFailedException, OAuthCommunicationException, IOException, OAuthException, ParserConfigurationException, SAXException {
+		Document d = fetchDocument(id, HTTP_DELETE, null);
+		String test = "just need a breakpoint in here";
 	}
 	
 	public Document getTitleState(String titleUrl) throws OAuthExpectationFailedException, OAuthCommunicationException, ParserConfigurationException, SAXException, IOException, OAuthException

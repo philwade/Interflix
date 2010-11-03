@@ -74,5 +74,5 @@ public class MovieSearch extends QueActivity {
 		// TODO Auto-generated method stub
 		
 	}
-    
+
 }

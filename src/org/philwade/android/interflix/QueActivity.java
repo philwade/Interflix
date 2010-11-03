@@ -113,8 +113,9 @@ public abstract class QueActivity extends ListActivity {
 	  NetflixQueRetriever queRetriever = new NetflixQueRetriever(getSharedPreferences(InterFlix.PREFS_FILE, 0));
 	  switch (item.getItemId()) {
 	  case R.id.item_remove:
-		  //TODO: get the item, then kill it! also, refresh que
-		  clickedTitle.removeFromQue(queRetriever);
+		  removeFromQue(clickedTitle, queRetriever);
+		  resetList();
+		  getQueContents();
 	    return true;
 	  case R.id.item_move:
 		  //TODO: write up the position change code
@@ -126,6 +127,18 @@ public abstract class QueActivity extends ListActivity {
 	}
 	
 	abstract void getQueContents();
+	public void removeFromQue(NetflixTitle title, NetflixQueRetriever retriever)
+	{
+		title.removeFromQue(retriever);
+	}
+	
+	public void resetList()
+	{
+		//set these values so list gets cleared when we reload
+		firstLoad = true; 
+		QUE_OFFSET = 0;
+		moreButton.setEnabled(true);
+	}
 	
 	final OnClickListener moreListener = new OnClickListener()
 	{

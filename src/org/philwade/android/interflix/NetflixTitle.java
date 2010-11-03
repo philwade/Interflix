@@ -26,7 +26,7 @@ public class NetflixTitle {
 	public boolean inDVDQ;
 	public boolean inInstantQ;
 	public boolean queStatusChecked = false;
-	public int id;
+	public String id;
 	
 	public NetflixTitle(Document rootElement)
 	{
@@ -38,7 +38,7 @@ public class NetflixTitle {
 		NodeList titles = titleElement.getElementsByTagName("title");
 		NamedNodeMap titleAttributes = titles.item(0).getAttributes();
 		title = titleAttributes.getNamedItem("short").getNodeValue();
-		
+		id = titleElement.getElementsByTagName("id").item(0).getChildNodes().item(0).getNodeValue();	
 		NodeList synopsees = titleElement.getElementsByTagName("synopsis");
 		NodeList formats = titleElement.getElementsByTagName("delivery_formats");
 		
@@ -281,8 +281,32 @@ public class NetflixTitle {
 		}	
 	}
 	
-	public boolean removeFromQue(NetflixDataRetriever retriever)
+	//que removal is done based on the id of an individual que item.
+	public void removeFromQue(NetflixDataRetriever retriever)
 	{
-		return true;
+		try {
+			retriever.removeFromQue(id);
+		} catch (ClientProtocolException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (OAuthExpectationFailedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (OAuthCommunicationException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (OAuthException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (ParserConfigurationException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (SAXException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 }
