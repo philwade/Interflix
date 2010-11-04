@@ -21,6 +21,7 @@ import android.widget.AdapterView.OnItemClickListener;
 
 public abstract class QueActivity extends ListActivity {
 	protected static final int PROGRESS_DIALOG = 0;	
+	protected static final int NUMBER_PICK_DIALOG = 2;	
 	protected static final int LOAD_MORE_ID = 1;	
 	protected int QUE_OFFSET = 0;
 	protected boolean firstLoad = true;
@@ -92,6 +93,11 @@ public abstract class QueActivity extends ListActivity {
                 dialog.setIndeterminate(true);
                 dialog.setCancelable(true);
                 return dialog;
+			case NUMBER_PICK_DIALOG:
+				Dialog pickerDialog = new Dialog(this);
+				pickerDialog.setTitle("Choose New Position");
+				pickerDialog.setContentView(R.layout.number_picker_pref);
+				return pickerDialog;
 		}
 		return null;
 	}
@@ -119,7 +125,7 @@ public abstract class QueActivity extends ListActivity {
 	    return true;
 	  case R.id.item_move:
 		  //TODO: write up the position change code
-		  Toast.makeText(getApplicationContext(), "This button isn't implemented yet", 1000).show();
+		  showDialog(NUMBER_PICK_DIALOG);
 	    return true;
 	  default:
 	    return super.onContextItemSelected(item);
