@@ -25,6 +25,18 @@
     <org.philwade.android.interflix.NumberPicker
         android:id="@+id/pref_num_picker"
         android:layout_width="fill_parent"
-        android:layout_height="fill_parent" />
-    
+    	android:padding="5dip"
+        android:layout_height="wrap_content" />
+        
+    <Button
+		android:id="@+id/num_pick_ok"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+		android:text="OK" />
+	
+	<Button
+		android:id="@+id/num_pick_cancel"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+		android:text="Cancel" />
 </LinearLayout>
