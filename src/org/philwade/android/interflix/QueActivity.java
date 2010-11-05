@@ -25,8 +25,10 @@ public abstract class QueActivity extends ListActivity {
 	protected static final int LOAD_MORE_ID = 1;	
 	protected int QUE_OFFSET = 0;
 	protected boolean firstLoad = true;
+	public Dialog pickerDialog;
 	public Button moreButton;
 	public NetflixTitle[] queItems;
+	public NetflixTitle currentClickedTitle;
 	public void onCreate(Bundle savedInstanceState) {
 		   super.onCreate(savedInstanceState);
 		   moreButton = new Button(this);
@@ -94,9 +96,25 @@ public abstract class QueActivity extends ListActivity {
                 dialog.setCancelable(true);
                 return dialog;
 			case NUMBER_PICK_DIALOG:
-				Dialog pickerDialog = new Dialog(this);
+				pickerDialog = new Dialog(this);
 				pickerDialog.setTitle("Choose New Position");
 				pickerDialog.setContentView(R.layout.number_picker_pref);
+				Button okButton = (Button) pickerDialog.findViewById(R.id.num_pick_ok);
+				okButton.setOnClickListener(new OnClickListener(){
+					public void onClick(View v) {
+						NumberPicker picker = (NumberPicker) pickerDialog.findViewById(R.id.pref_num_picker);
+						pickerDialog.dismiss();
+						resetList();
+						getQueContents();
+					}
+				});
+				Button cancelButton = (Button) pickerDialog.findViewById(R.id.num_pick_cancel);
+				cancelButton.setOnClickListener(new OnClickListener(){
+					public void onClick(View v) {
+						removeDialog(NUMBER_PICK_DIALOG);
+					}
+				});
+				
 				return pickerDialog;
 		}
 		return null;
@@ -116,6 +134,7 @@ public abstract class QueActivity extends ListActivity {
 	  AdapterContextMenuInfo info = (AdapterContextMenuInfo) item.getMenuInfo();
 	  ArrayAdapter<NetflixTitle> adapter = (ArrayAdapter<NetflixTitle>) getListAdapter();
 	  NetflixTitle clickedTitle = adapter.getItem(info.position);
+	  currentClickedTitle = clickedTitle;
 	  NetflixQueRetriever queRetriever = new NetflixQueRetriever(getSharedPreferences(InterFlix.PREFS_FILE, 0));
 	  switch (item.getItemId()) {
 	  case R.id.item_remove:
@@ -124,7 +143,6 @@ public abstract class QueActivity extends ListActivity {
 		  getQueContents();
 	    return true;
 	  case R.id.item_move:
-		  //TODO: write up the position change code
 		  showDialog(NUMBER_PICK_DIALOG);
 	    return true;
 	  default:
@@ -133,6 +151,8 @@ public abstract class QueActivity extends ListActivity {
 	}
 	
 	abstract void getQueContents();
+	abstract void changeQuePosition(NetflixTitle title, int position);
+
 	public void removeFromQue(NetflixTitle title, NetflixQueRetriever retriever)
 	{
 		title.removeFromQue(retriever);
