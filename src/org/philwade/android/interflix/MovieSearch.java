@@ -75,4 +75,10 @@ public class MovieSearch extends QueActivity {
 		
 	}
 
+	@Override
+	void changeQuePosition(NetflixTitle title, int position) {
+		// TODO Auto-generated method stub
+		
+	}
+
 }
