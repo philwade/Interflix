@@ -44,7 +44,7 @@ public class InstantQueActivity extends QueActivity {
 
 	@Override
 	void changeQuePosition(NetflixTitle title, int position) {
-		// TODO Auto-generated method stub
-		
+		NetflixQueRetriever queRetriever = new NetflixQueRetriever(getSharedPreferences(InterFlix.PREFS_FILE, 0));	
+		queRetriever.changeInstantPosition(title, position);
 	}
 }

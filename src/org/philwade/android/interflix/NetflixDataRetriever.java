@@ -66,7 +66,7 @@ public class NetflixDataRetriever {
     public static final int HTTP_DELETE = 2;
     public static final int OFFSET_INCREMENT = 25;
     public static final int NO_POSITION = -1;
-    private static final Uri CALLBACK_URI = Uri.parse("interflix-app:///");
+    private static final Uri CALLBACK_URI = Uri.parse(APP_URI);
     private static final String INSTANT_QUE_URI = "/queues/instant";
     private static final String DISC_QUE_URI = "/queues/disc";
     public String userId;
@@ -301,7 +301,62 @@ public class NetflixDataRetriever {
     	editor.commit();
     }
 
-	
+    public void changeInstantPosition(NetflixTitle title, int position)
+    {
+			try {
+				addToQue(title.idUrl, INSTANT_QUE_URI, position);
+			} catch (ClientProtocolException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (OAuthExpectationFailedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (OAuthCommunicationException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (OAuthException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (ParserConfigurationException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (SAXException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+    }
+    
+    public void changeDiscPosition(NetflixTitle title, int position)
+    {
+    	try {
+			addToQue(title.idUrl, DISC_QUE_URI, position);
+		} catch (ClientProtocolException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (OAuthExpectationFailedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (OAuthCommunicationException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (OAuthException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (ParserConfigurationException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (SAXException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+    }
+    
 	public void addToQue(String idUrl, String queUrl, int position) throws ClientProtocolException, OAuthExpectationFailedException, OAuthCommunicationException, IOException, OAuthException, ParserConfigurationException, SAXException {
 		String url = "http://api.netflix.com/users/" + userId + queUrl;
 		HashMap<String, String> parameters = new HashMap<String, String>();

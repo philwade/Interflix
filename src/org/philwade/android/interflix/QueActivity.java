@@ -103,6 +103,7 @@ public abstract class QueActivity extends ListActivity {
 				okButton.setOnClickListener(new OnClickListener(){
 					public void onClick(View v) {
 						NumberPicker picker = (NumberPicker) pickerDialog.findViewById(R.id.pref_num_picker);
+						changeQuePosition(currentClickedTitle, picker.getCurrent());
 						pickerDialog.dismiss();
 						resetList();
 						getQueContents();
