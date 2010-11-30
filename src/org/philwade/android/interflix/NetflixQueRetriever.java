@@ -1,8 +1,6 @@
 package org.philwade.android.interflix;
 
 
-import java.util.HashMap;
-
 import org.w3c.dom.Document;
 import org.w3c.dom.NodeList;
 

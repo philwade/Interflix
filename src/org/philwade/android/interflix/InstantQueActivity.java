@@ -3,12 +3,8 @@ package org.philwade.android.interflix;
 import org.philwade.android.interflix.R;
 
 import android.os.Bundle;
-import android.view.View;
-import android.view.View.OnClickListener;
-import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
-import android.widget.AdapterView.OnItemClickListener;
 
 public class InstantQueActivity extends QueActivity {
 	public void onCreate(Bundle savedInstanceState) {

@@ -1,17 +1,6 @@
 package org.philwade.android.interflix;
 
-import java.io.IOException;
-
-import javax.xml.parsers.ParserConfigurationException;
-
-import oauth.signpost.exception.OAuthCommunicationException;
-import oauth.signpost.exception.OAuthException;
-import oauth.signpost.exception.OAuthExpectationFailedException;
-
-import org.apache.http.client.ClientProtocolException;
 import org.w3c.dom.Document;
-import org.xml.sax.SAXException;
-
 import android.app.Activity;
 import android.os.Bundle;
 import android.os.Handler;
