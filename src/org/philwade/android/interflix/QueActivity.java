@@ -93,6 +93,7 @@ public abstract class QueActivity extends ListActivity {
 				ProgressDialog dialog = new ProgressDialog(this);
                 dialog.setIndeterminate(true);
                 dialog.setCancelable(true);
+                dialog.setMessage("Loading...");
                 return dialog;
 			case NUMBER_PICK_DIALOG:
 				pickerDialog = new Dialog(this);
