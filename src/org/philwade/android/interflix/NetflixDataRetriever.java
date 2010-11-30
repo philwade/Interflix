@@ -16,7 +16,6 @@ import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 
 import oauth.signpost.OAuth;
-import oauth.signpost.OAuthProvider;
 import oauth.signpost.commonshttp.CommonsHttpOAuthConsumer;
 import oauth.signpost.commonshttp.CommonsHttpOAuthProvider;
 import oauth.signpost.exception.OAuthCommunicationException;
@@ -74,7 +73,7 @@ public class NetflixDataRetriever {
     public String userSecret;
     
     public CommonsHttpOAuthConsumer consumer = new CommonsHttpOAuthConsumer(consumerKey, sharedSecret);
-	public OAuthProvider provider = new CommonsHttpOAuthProvider(NETFLIX_REQUEST_TOKEN_URL, NETFLIX_ACCESS_TOKEN_URL, NETFLIX_AUTHORIZE_URL);
+	public CommonsHttpOAuthProvider provider = new CommonsHttpOAuthProvider(NETFLIX_REQUEST_TOKEN_URL, NETFLIX_ACCESS_TOKEN_URL, NETFLIX_AUTHORIZE_URL);
 	private SharedPreferences prefs;
    
     public NetflixDataRetriever(SharedPreferences preferences)
@@ -87,6 +86,7 @@ public class NetflixDataRetriever {
     	{
     		consumer.setTokenWithSecret(userToken, userSecret);
     	}
+    	provider.setOAuth10a(true);
     }
     
     public Document fetchDocument(String urlString) throws OAuthExpectationFailedException, OAuthCommunicationException, ParserConfigurationException, SAXException, IOException, OAuthException
@@ -158,10 +158,9 @@ public class NetflixDataRetriever {
     	Uri authUri = Uri.parse(authUrl);
     	
     	//save this stuff - we need it again to get the access token and secret
-    	String requestToken = authUri.getQueryParameter("oauth_token");
     	SharedPreferences.Editor editor = prefs.edit();
     	editor.putString("request_key_secret", consumer.getTokenSecret());
-		editor.putString("request_key", requestToken);
+		editor.putString("request_key", consumer.getToken());
     	editor.commit();
     	
     	return authUri;
@@ -366,8 +365,8 @@ public class NetflixDataRetriever {
 		{
 			parameters.put("position", Integer.toString(position));
 		}
+		@SuppressWarnings("unused")
 		Document d = fetchDocument(url, HTTP_POST, parameters);
-		String test = "just need a breakpoint in here";
 	}
 	
 	public void addToQue(String idUrl, String queUrl) throws ClientProtocolException, OAuthExpectationFailedException, OAuthCommunicationException, IOException, OAuthException, ParserConfigurationException, SAXException {
@@ -383,8 +382,8 @@ public class NetflixDataRetriever {
 	}
 	
 	public void removeFromQue(String id) throws ClientProtocolException, OAuthExpectationFailedException, OAuthCommunicationException, IOException, OAuthException, ParserConfigurationException, SAXException {
+		@SuppressWarnings("unused")
 		Document d = fetchDocument(id, HTTP_DELETE, null);
-		String test = "just need a breakpoint in here";
 	}
 	
 	public Document getTitleState(String titleUrl) throws OAuthExpectationFailedException, OAuthCommunicationException, ParserConfigurationException, SAXException, IOException, OAuthException

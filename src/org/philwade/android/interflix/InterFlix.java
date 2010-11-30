@@ -30,7 +30,7 @@ public class InterFlix extends Activity {
 		if(uri != null && uri.toString().startsWith(NetflixDataRetriever.APP_URI)) {
 			handleAuthReturn(uri, dataRetriever);
 			authDone = true;
-		  	Toast.makeText(getApplicationContext(), "Thanks for registering", 2000).show();
+		  	Toast.makeText(getApplicationContext(), "Thanks for authorizing", 2000).show();
 		}
         
         String user_id = prefs.getString("user_id", null);
@@ -121,7 +121,7 @@ public class InterFlix extends Activity {
     public void handleAuthReturn(Uri uri, NetflixDataRetriever dataRetriever)
     {
         	try {
-			  	String access_token = uri.getQueryParameter("oauth_token");
+			  	String access_token = uri.getQueryParameter("oauth_verifier");
 			  	dataRetriever.setupAccessTokens(access_token);
 			} catch (OAuthMessageSignerException e) {
 				// TODO Auto-generated catch block
