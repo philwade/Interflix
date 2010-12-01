@@ -24,6 +24,7 @@ public abstract class QueActivity extends ListActivity {
 	protected static final int LOAD_MORE_ID = 1;	
 	protected int QUE_OFFSET = 0;
 	protected boolean firstLoad = true;
+	protected boolean appendNew = true;
 	public Dialog pickerDialog;
 	public Button moreButton;
 	public NetflixTitle[] queItems;
@@ -54,11 +55,12 @@ public abstract class QueActivity extends ListActivity {
 					//TODO: find a better way to know when we hit bottom
 				}
 				ArrayAdapter<NetflixTitle> la = (ArrayAdapter<NetflixTitle>) getListAdapter();
-				if(firstLoad == true)
+				if(firstLoad == true || appendNew == false)
 				{
 					la.clear();
 					firstLoad = false;
 				}
+				
 				
 				for(NetflixTitle item : queItems)
 				{

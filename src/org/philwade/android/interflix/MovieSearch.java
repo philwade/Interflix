@@ -21,6 +21,7 @@ public class MovieSearch extends QueActivity {
 	public EditText editText;
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        appendNew = false;
 		setContentView(R.layout.search);
         editText = (EditText) findViewById(R.id.entry);
         okButton = (Button) findViewById(R.id.ok);

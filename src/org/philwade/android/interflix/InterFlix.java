@@ -118,6 +118,7 @@ public class InterFlix extends Activity {
     	};
     }
     
+    //TODO: move this to data retriever probably
     public void handleAuthReturn(Uri uri, NetflixDataRetriever dataRetriever)
     {
         	try {
