@@ -6,10 +6,14 @@ import oauth.signpost.exception.OAuthMessageSignerException;
 import oauth.signpost.exception.OAuthNotAuthorizedException;
 import org.philwade.android.interflix.R;
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.app.Dialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.SystemClock;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.TextView;
@@ -17,6 +21,7 @@ import android.widget.Toast;
 
 public class InterFlix extends Activity {
 	public static final String PREFS_FILE = "InterflixPrefs";
+	protected static final int SETUP_DIALOG = 0;	
 	public boolean authDone = false;
 	public NetflixDataRetriever dataRetriever = null;
     /** Called when the activity is first created. */
@@ -41,24 +46,8 @@ public class InterFlix extends Activity {
         
         if(!authDone)
         {
-		  	Toast.makeText(getApplicationContext(), "Welcome to InterFlix. Since you're new, we just need to set you up.", 8000).show();
-        	try {
-				Uri authUri = dataRetriever.requestAuthUri();
-				Intent intent = new Intent(Intent.ACTION_VIEW, authUri);
-				startActivityForResult(intent, 0);
-			} catch (OAuthMessageSignerException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			} catch (OAuthNotAuthorizedException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			} catch (OAuthExpectationFailedException e) {
-			// TODO Auto-generated catch block
-				e.printStackTrace();
-			} catch (OAuthCommunicationException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
+        	showDialog(SETUP_DIALOG);
+        	
         }
         
         setContentView(R.layout.main);
@@ -66,10 +55,49 @@ public class InterFlix extends Activity {
     	que.setOnClickListener(queListener());
     	TextView search = (TextView) findViewById(R.id.search_link_view);
     	search.setOnClickListener(searchListener());
-    	TextView clear = (TextView) findViewById(R.id.clear_link_view);
-    	clear.setOnClickListener(clearListener());
+    	//TextView clear = (TextView) findViewById(R.id.clear_link_view);
+    	//clear.setOnClickListener(clearListener());
     }
     
+    @Override
+    protected Dialog onCreateDialog(int id)
+    {
+    	switch(id)
+    	{
+    		case SETUP_DIALOG:
+    			AlertDialog.Builder builder = new AlertDialog.Builder(this);
+    			builder.setMessage("Welcome to Interflix. Since this is your first time using the program, we just need to setup your account.");
+    			builder.setCancelable(false);
+    			builder.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+					public void onClick(DialogInterface dialog, int which) {
+						try {
+							Uri authUri = dataRetriever.requestAuthUri();
+							Intent intent = new Intent(Intent.ACTION_VIEW, authUri);
+							startActivityForResult(intent, 0);
+						} catch (OAuthMessageSignerException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						} catch (OAuthNotAuthorizedException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						} catch (OAuthExpectationFailedException e) {
+						// TODO Auto-generated catch block
+							e.printStackTrace();
+						} catch (OAuthCommunicationException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
+					}
+				});
+    			builder.setNegativeButton("No thanks", new DialogInterface.OnClickListener() {
+					public void onClick(DialogInterface dialog, int which) {
+						InterFlix.this.finish();
+					}
+				});
+    			return builder.create();
+    	}
+    	return null;
+    }
     public OnClickListener queListener()
     {
     	return new OnClickListener()
@@ -130,4 +158,6 @@ public class InterFlix extends Activity {
 			}
 		}
     }
+
+
 		

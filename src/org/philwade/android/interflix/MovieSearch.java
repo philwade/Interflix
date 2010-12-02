@@ -5,9 +5,11 @@ import java.net.URLEncoder;
 
 import org.philwade.android.interflix.R;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
@@ -35,6 +37,10 @@ public class MovieSearch extends QueActivity {
     {
 		public void onClick(View v) {
 			showDialog(PROGRESS_DIALOG);
+			getApplicationContext();
+			InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
+			imm.hideSoftInputFromWindow(editText.getWindowToken(), 0);
+
 			try {
 				String term = editText.getEditableText().toString();
 				String cleanTerm = URLEncoder.encode(term);
