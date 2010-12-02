@@ -1,6 +1,16 @@
 package org.philwade.android.interflix;
 
+import java.io.IOException;
+
+import javax.xml.parsers.ParserConfigurationException;
+
+import oauth.signpost.exception.OAuthCommunicationException;
+import oauth.signpost.exception.OAuthException;
+import oauth.signpost.exception.OAuthExpectationFailedException;
+
 import org.w3c.dom.Document;
+import org.xml.sax.SAXException;
+
 import android.app.Activity;
 import android.os.Bundle;
 import android.os.Handler;
@@ -20,6 +30,7 @@ public class TitleActivity extends Activity
 	public Button instantQueButton;
 	public TextView inDVDQText;
 	public TextView inInstantQText;
+	private NetflixDataRetriever retriever;
 	public void onCreate(Bundle savedInstanceState)
 	{
 		super.onCreate(savedInstanceState);
@@ -36,6 +47,7 @@ public class TitleActivity extends Activity
 		queButton.setOnClickListener(addListener);
 		inDVDQText = (TextView) findViewById(R.id.inq_text);
 		inInstantQText = (TextView) findViewById(R.id.inq_instant_text);
+		retriever = new NetflixDataRetriever(getSharedPreferences(InterFlix.PREFS_FILE, 0));
 		getTitleData();
 	}
 	
@@ -52,11 +64,11 @@ public class TitleActivity extends Activity
 			titleSynopsis.setText(Html.fromHtml(title.synopsis));	
 			
 			ImageView coverView = (ImageView) findViewById(R.id.title_cover);
-			NetflixDataRetriever retriever = new NetflixDataRetriever(getSharedPreferences(InterFlix.PREFS_FILE, 0));
 			retriever.fetchImageOnThread(title.coverArt, coverView);
 			if(title.inDVDQ(retriever))
 			{
 				inDVDQText.setVisibility(View.VISIBLE);
+				queButton.setEnabled(false);
 			}
 			else
 			{
@@ -65,6 +77,7 @@ public class TitleActivity extends Activity
 			if(title.inInstantQ(retriever))
 			{
 				inInstantQText.setVisibility(View.VISIBLE);
+				instantQueButton.setEnabled(false);
 			}
 			else
 			{
@@ -82,16 +95,7 @@ public class TitleActivity extends Activity
 			{
 				Document node = null;
 				try{
-					NetflixDataRetriever searchRetriever = new NetflixDataRetriever(getSharedPreferences(InterFlix.PREFS_FILE, 0));
-					if(intentUrl != null)
-					{
-						node = searchRetriever.fetchDocument(intentUrl+"?expand=synopsis,formats");
-					}
-					else
-					{
-						//TODO remove this as it is for testing
-						node = searchRetriever.fetchDocument("http://api.netflix.com/catalog/titles/movies/60021896?expand=synopsis,formats");
-					}
+					node = retriever.fetchDocument(intentUrl+"?expand=synopsis,formats");
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
@@ -111,16 +115,79 @@ public class TitleActivity extends Activity
 	public OnClickListener addListener = new OnClickListener()
 	{
 		public void onClick(View v) {
-			NetflixDataRetriever retriever = new NetflixDataRetriever(getSharedPreferences(InterFlix.PREFS_FILE, 0));
-			title.addToDVDQue(retriever);
+
+			setProgressBarIndeterminateVisibility(true);
+			Thread t = new Thread()
+			{
+				public void run()
+				{
+					Document node = null;
+					title.addToDVDQue(retriever);
+					try {
+						node = retriever.fetchDocument(intentUrl+"?expand=synopsis,formats");
+					} catch (OAuthExpectationFailedException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					} catch (OAuthCommunicationException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					} catch (ParserConfigurationException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					} catch (SAXException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					} catch (IOException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					} catch (OAuthException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+					title = new NetflixTitle(node);
+					titleHandler.post(fillInTitle);
+				}
+			};
+			t.start();
 		}
 	};
 	
 	public OnClickListener instantAddListener = new OnClickListener()
 	{
 		public void onClick(View v) {
-			NetflixDataRetriever retriever = new NetflixDataRetriever(getSharedPreferences(InterFlix.PREFS_FILE, 0));
-			title.addToInstantQue(retriever);
+			setProgressBarIndeterminateVisibility(true);
+			Thread t = new Thread()
+			{
+				public void run()
+				{
+					Document node = null;
+					title.addToInstantQue(retriever);
+					try {
+						node = retriever.fetchDocument(intentUrl+"?expand=synopsis,formats");
+					} catch (OAuthExpectationFailedException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					} catch (OAuthCommunicationException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					} catch (ParserConfigurationException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					} catch (SAXException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					} catch (IOException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					} catch (OAuthException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+					title = new NetflixTitle(node);
+					titleHandler.post(fillInTitle);
+				}
+			};
+			t.start();
 		}
 	};
 }
