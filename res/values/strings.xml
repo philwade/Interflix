@@ -4,8 +4,7 @@
     <string name="app_name">InterFlix Beta</string>
     <string name="que_link">Go to Que</string>
     <string name="search_link">Go to Search</string>
-    <string name="title_link">title view</string>
-    <string name="clear_link">clear prefs</string>
+    <string name="clear_link">clear preferences</string>
     <string-array name="countries_array">
         <item>Bahrain</item>
         <item>Bangladesh</item>
@@ -15,8 +14,6 @@
         <item>Belize</item>
         <item>Benin</item>
     </string-array>
-    <string name="autocomplete_url">http://api.netflix.com/catalog/titles/autocomplete</string>
-    <string name="search_title">I\'m going to be search someday</string>
     <string name="inq_text">In DVD Que</string>
     <string name="inq_instant_text">In Instant Que</string>
     <string name="addq_instant_text">Add to Instant Que</string>

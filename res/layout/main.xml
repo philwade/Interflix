@@ -19,13 +19,6 @@
     android:text="@string/search_link"
     />
 <TextView  
-	android:id="@+id/title_link_view"
-	android:textSize="15pt"
-    android:layout_width="fill_parent" 
-    android:layout_height="wrap_content" 
-    android:text="@string/title_link"
-    />
-<TextView  
 	android:id="@+id/clear_link_view"
 	android:textSize="15pt"
     android:layout_width="fill_parent" 
