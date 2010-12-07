@@ -7,8 +7,10 @@ import org.philwade.android.interflix.R;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.view.KeyEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.View.OnKeyListener;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -31,11 +33,30 @@ public class MovieSearch extends QueActivity {
         ListView lv = getListView();
 		lv.setOnItemClickListener(clickListener);
 		okButton.setOnClickListener(searchListen);
+		
+		editText.setOnKeyListener(new OnKeyListener(){
+
+			public boolean onKey(View v, int keyCode, KeyEvent event) {
+				if(keyCode == KeyEvent.KEYCODE_ENTER)
+				{
+					doSearch();
+					return true;
+				}
+				return false;
+			}
+			
+		});
     }
     
     public OnClickListener searchListen = new OnClickListener()
     {
 		public void onClick(View v) {
+			doSearch();
+		}
+    };
+    
+    public void doSearch()
+    {
 			showDialog(PROGRESS_DIALOG);
 			getApplicationContext();
 			InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
@@ -49,8 +70,8 @@ public class MovieSearch extends QueActivity {
 				Toast.makeText(getApplicationContext(), "Something horrible has happened", 3000).show();
 				e.printStackTrace();
 			}
-		}
-    };
+    	
+    }
     
 	public void retrieveResults(final String searchTerm)
 	{
