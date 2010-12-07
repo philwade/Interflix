@@ -255,13 +255,20 @@ public class NetflixTitle {
 	private void availabiltyEquals(Element el)
 	{
 		String label = el.getAttribute("label");
-		if(label.equals("DVD"))
+		Element parent = (Element) el.getParentNode();
+		long avail_from = Integer.parseInt(parent.getAttribute("available_from"));
+		long unixTime = System.currentTimeMillis() / 1000L;
+		
+		if(avail_from < unixTime)
 		{
-			this.disc = true;
-		}
-		if(label.equals("instant"))
-		{
-			this.instant = true;
+			if(label.equals("DVD"))
+			{
+				this.disc = true;
+			}
+			if(label.equals("instant"))
+			{
+				this.instant = true;
+			}
 		}
 	}
 	
