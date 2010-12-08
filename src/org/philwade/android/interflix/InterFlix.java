@@ -13,22 +13,24 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
-import android.os.SystemClock;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.ImageButton;
-import android.widget.TextView;
+import android.widget.LinearLayout;
 import android.widget.Toast;
 
 public class InterFlix extends Activity {
 	public static final String PREFS_FILE = "InterflixPrefs";
 	protected static final int SETUP_DIALOG = 0;	
 	public boolean authDone = false;
+	private int viewH;
+	private int viewW;
 	public NetflixDataRetriever dataRetriever = null;
     /** Called when the activity is first created. */
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        
         SharedPreferences prefs = getSharedPreferences(PREFS_FILE, 0);
 		dataRetriever = new NetflixDataRetriever(prefs);
         
@@ -52,6 +54,8 @@ public class InterFlix extends Activity {
         }
         
         setContentView(R.layout.main);
+        
+        
     	ImageButton que = (ImageButton) findViewById(R.id.que_link_view);
     	que.setOnClickListener(queListener());
     	ImageButton search = (ImageButton) findViewById(R.id.search_link_view);
@@ -60,6 +64,19 @@ public class InterFlix extends Activity {
     	//clear.setOnClickListener(clearListener());
     }
     
+    @Override
+    public void onWindowFocusChanged(boolean hasFocus)
+    {
+    	if(hasFocus)
+    	{
+        	LinearLayout mLayout = (LinearLayout) findViewById(R.id.home_root);
+        	viewH = mLayout.getHeight();
+        	viewW = mLayout.getWidth();
+        	int wPadding = (int) ((int) viewW * 0.30);
+        	int hPadding = (int) ((int) viewH * 0.25);
+        	mLayout.setPadding(wPadding, hPadding, 0, 0);
+    	}
+    }
     @Override
     protected Dialog onCreateDialog(int id)
     {
