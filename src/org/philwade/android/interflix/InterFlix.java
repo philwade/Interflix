@@ -16,6 +16,7 @@ import android.os.Bundle;
 import android.os.SystemClock;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -51,9 +52,9 @@ public class InterFlix extends Activity {
         }
         
         setContentView(R.layout.main);
-    	TextView que = (TextView) findViewById(R.id.que_link_view);
+    	ImageButton que = (ImageButton) findViewById(R.id.que_link_view);
     	que.setOnClickListener(queListener());
-    	TextView search = (TextView) findViewById(R.id.search_link_view);
+    	ImageButton search = (ImageButton) findViewById(R.id.search_link_view);
     	search.setOnClickListener(searchListener());
     	//TextView clear = (TextView) findViewById(R.id.clear_link_view);
     	//clear.setOnClickListener(clearListener());
