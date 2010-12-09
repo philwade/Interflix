@@ -256,7 +256,14 @@ public class NetflixTitle {
 	{
 		String label = el.getAttribute("label");
 		Element parent = (Element) el.getParentNode();
-		long avail_from = Integer.parseInt(parent.getAttribute("available_from"));
+		long avail_from;
+		try{
+			avail_from = Integer.parseInt(parent.getAttribute("available_from"));
+		}
+		catch(NumberFormatException e)
+		{
+			avail_from = 0;
+		}
 		long unixTime = System.currentTimeMillis() / 1000L;
 		
 		if(avail_from < unixTime)
