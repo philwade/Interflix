@@ -1,20 +1,28 @@
 package org.philwade.android.interflix;
 
+import java.util.ArrayList;
+
+
 import android.app.Dialog;
 import android.app.ListActivity;
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.view.ContextMenu;
+import android.view.LayoutInflater;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.ContextMenu.ContextMenuInfo;
 import android.view.View.OnClickListener;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.AdapterView.AdapterContextMenuInfo;
 import android.widget.AdapterView.OnItemClickListener;
 
@@ -42,7 +50,6 @@ public abstract class QueActivity extends ListActivity {
 	
 	final Runnable updateQue = new Runnable()
 	{
-		@SuppressWarnings("unchecked")
 		public void run() 
 		{
 			removeDialog(PROGRESS_DIALOG);
@@ -54,7 +61,7 @@ public abstract class QueActivity extends ListActivity {
 					moreButton.setEnabled(false);
 					//TODO: find a better way to know when we hit bottom
 				}
-				ArrayAdapter<NetflixTitle> la = (ArrayAdapter<NetflixTitle>) getListAdapter();
+				TitleAdapter la = (TitleAdapter) getListAdapter();
 				if(firstLoad == true || appendNew == false)
 				{
 					la.clear();
@@ -175,4 +182,37 @@ public abstract class QueActivity extends ListActivity {
 			getQueContents();
 		}
 	};
+	
+	   protected class TitleAdapter extends ArrayAdapter<NetflixTitle> {
+	    	private ArrayList<NetflixTitle> items = null;
+	    	public TitleAdapter(Context context, int textViewResourceId)
+	    	{
+	    		super(context, textViewResourceId);	
+	    	}
+	    	
+	    	@Override
+	        public View getView(int position, View convertView, ViewGroup parent) {
+	    		View v = convertView;
+	    		if(v == null)
+	    		{
+	    			LayoutInflater inflator = (LayoutInflater)getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+	    			v = inflator.inflate(R.layout.title_row, null);
+	    		}
+	    		
+	    		NetflixTitle title = getItem(position);
+	    		if(title != null)
+	    		{
+	    			NetflixDataRetriever retriever = new NetflixDataRetriever(getSharedPreferences(InterFlix.PREFS_FILE, 0));
+	    			TextView tv = (TextView) v.findViewById(R.id.list_title_title);
+	    			tv.setText(title.title);
+	    			TextView ytv = (TextView) v.findViewById(R.id.list_title_year);
+	    			ytv.setText(title.year);
+	    			ImageView iv = (ImageView) v.findViewById(R.id.list_title_cover);
+	    			iv.setImageResource(R.drawable.loading);
+	    			retriever.fetchImageOnThread(title.coverArt, iv);
+	    		}
+	    		return v;
+	    	}
+	    };
+	    
 }

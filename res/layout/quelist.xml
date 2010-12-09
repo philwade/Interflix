@@ -4,5 +4,6 @@
     android:layout_height="fill_parent"
     android:padding="10dp"
     android:id="@+id/queList"
+    style="@style/default_text"
     android:textSize="16sp" >
 </TextView>

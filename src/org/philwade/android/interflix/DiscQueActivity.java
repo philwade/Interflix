@@ -12,7 +12,7 @@ public class DiscQueActivity extends QueActivity {
 			ListView lv = getListView();
 			lv.setOnItemClickListener(clickListener);
 			lv.addFooterView(moreButton);
-			setListAdapter(new ArrayAdapter<NetflixTitle>(this, R.layout.quelist));
+			setListAdapter(new TitleAdapter(this, R.layout.quelist));
 			showDialog(PROGRESS_DIALOG);
 			getQueContents();
 	}

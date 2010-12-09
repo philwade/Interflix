@@ -3,7 +3,6 @@ package org.philwade.android.interflix;
 import org.philwade.android.interflix.R;
 
 import android.os.Bundle;
-import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
 public class InstantQueActivity extends QueActivity {
@@ -13,7 +12,7 @@ public class InstantQueActivity extends QueActivity {
 			lv.setOnItemClickListener(clickListener);
 			lv.addFooterView(moreButton);
 			
-			setListAdapter(new ArrayAdapter<NetflixTitle>(this, R.layout.quelist));
+			setListAdapter(new TitleAdapter(this, R.layout.quelist));
 			getQueContents();
 		}
 	

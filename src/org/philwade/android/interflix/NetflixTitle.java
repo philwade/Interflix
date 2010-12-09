@@ -21,6 +21,7 @@ public class NetflixTitle {
 	public String coverArt;
 	public String synopsis;
 	public String idUrl;
+	public String year;
 	public boolean instant = false;
 	public boolean disc = false;
 	public boolean inDVDQ;
@@ -41,6 +42,7 @@ public class NetflixTitle {
 		id = titleElement.getElementsByTagName("id").item(0).getChildNodes().item(0).getNodeValue();	
 		NodeList synopsees = titleElement.getElementsByTagName("synopsis");
 		NodeList formats = titleElement.getElementsByTagName("delivery_formats");
+		year = titleElement.getElementsByTagName("release_year").item(0).getChildNodes().item(0).getNodeValue();
 		
 		checkAvailablilty(formats);
 		

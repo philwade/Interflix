@@ -2,20 +2,26 @@ package org.philwade.android.interflix;
 
 import java.io.IOException;
 import java.net.URLEncoder;
+import java.util.ArrayList;
 
 import org.philwade.android.interflix.R;
 
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.os.Bundle;
 import android.view.KeyEvent;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.View.OnClickListener;
 import android.view.View.OnKeyListener;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 //TODO: this maybe shouldn't extend QueActivity
@@ -29,7 +35,7 @@ public class MovieSearch extends QueActivity {
 		setContentView(R.layout.search);
         editText = (EditText) findViewById(R.id.entry);
         okButton = (Button) findViewById(R.id.ok);
-        setListAdapter(new ArrayAdapter<NetflixTitle>(getApplicationContext(), R.layout.quelist));
+        setListAdapter(new TitleAdapter(getApplicationContext(), R.layout.quelist));
         ListView lv = getListView();
 		lv.setOnItemClickListener(clickListener);
 		okButton.setOnClickListener(searchListen);
@@ -108,5 +114,5 @@ public class MovieSearch extends QueActivity {
 		// TODO Auto-generated method stub
 		
 	}
-
+	
 }

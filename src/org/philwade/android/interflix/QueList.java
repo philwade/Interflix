@@ -34,6 +34,5 @@ public class QueList extends TabActivity {
     }
     
     public static final String[] FAILURE = { "Authorization failure"};
-    
-    
+  
 }
