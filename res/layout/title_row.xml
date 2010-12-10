@@ -8,6 +8,7 @@
   	<ImageView xmlns:android="http://schemas.android.com/apk/res/android"
     			android:layout_width="wrap_content"
     			android:layout_height="150px"
+	    		android:adjustViewBounds="true"
     			android:id="@+id/list_title_cover"/>
 		<LinearLayout
   		xmlns:android="http://schemas.android.com/apk/res/android"

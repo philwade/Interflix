@@ -42,6 +42,8 @@ import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
 
 import android.content.SharedPreferences;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Handler;
@@ -178,7 +180,7 @@ public class NetflixDataRetriever {
     	final Handler handler = new Handler() {
     		@Override
     		public void handleMessage(Message message) {
-    			imageView.setImageDrawable((Drawable) message.obj);
+    			imageView.setImageBitmap((Bitmap) message.obj);
     		}
     	};
 
@@ -186,9 +188,9 @@ public class NetflixDataRetriever {
     		@Override
     		public void run() {
     			//TODO : set imageView to a "pending" image
-    			Drawable drawable = null;
+    			Bitmap bitmap = null;
 				try {
-					drawable = fetchDrawable(urlString);
+					bitmap = fetchBitmap(urlString);
 				} catch (IllegalStateException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
@@ -205,17 +207,17 @@ public class NetflixDataRetriever {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
-    			Message message = handler.obtainMessage(1, drawable);
+    			Message message = handler.obtainMessage(1, bitmap);
     			handler.sendMessage(message);
     		}
     	};
     	thread.start();
     }
     
-    public Drawable fetchDrawable(String urlString) throws IllegalStateException, IOException, OAuthExpectationFailedException, OAuthCommunicationException, OAuthException
+    public Bitmap fetchBitmap(String urlString) throws IllegalStateException, IOException, OAuthExpectationFailedException, OAuthCommunicationException, OAuthException
     {
     	InputStream stream = fetch(urlString);
-    	Drawable drawable = Drawable.createFromStream(stream, "src");
+    	Bitmap drawable = BitmapFactory.decodeStream(stream);
     	return drawable;
     }
     
