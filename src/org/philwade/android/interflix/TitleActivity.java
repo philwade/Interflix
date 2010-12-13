@@ -12,6 +12,8 @@ import org.w3c.dom.Document;
 import org.xml.sax.SAXException;
 
 import android.app.Activity;
+import android.content.res.Resources;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.Handler;
 import android.text.Html;
@@ -20,6 +22,7 @@ import android.view.Window;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.RatingBar;
 import android.widget.TextView;
 
 public class TitleActivity extends Activity
@@ -83,6 +86,24 @@ public class TitleActivity extends Activity
 			{
 				instantQueButton.setEnabled(title.instantAvailable());
 			}
+		
+			Float userRating = title.getUserRating(retriever);
+			if(userRating != null)
+			{
+				RatingBar ratingDisplay = (RatingBar) findViewById(R.id.userRatingbar);
+				ratingDisplay.setRating(userRating);
+				ratingDisplay.setVisibility(View.VISIBLE);
+				ratingDisplay.setIsIndicator(true);
+			}
+			else
+			{	
+				RatingBar ratingDisplay = (RatingBar) findViewById(R.id.ratingbar);
+				ratingDisplay.setRating(title.rating);
+				ratingDisplay.setVisibility(View.VISIBLE);
+				ratingDisplay.setIsIndicator(true);
+			}
+			
+			
 		}
 	};
 	

@@ -394,4 +394,11 @@ public class NetflixDataRetriever {
 		Document d = fetchDocument(url);
 		return d;
 	}
+	
+	public Document getUserRating(String titleUrl) throws OAuthExpectationFailedException, OAuthCommunicationException, ParserConfigurationException, SAXException, IOException, OAuthException
+	{
+		String url = "http://api.netflix.com/users/" + userId + "/ratings/title?title_refs=" + titleUrl;
+		Document d = fetchDocument(url);
+		return d;
+	}
 }

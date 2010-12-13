@@ -15,6 +15,8 @@ import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
 
+import android.util.Log;
+
 public class NetflixTitle {
 
 	public String title;
@@ -27,6 +29,8 @@ public class NetflixTitle {
 	public boolean inDVDQ;
 	public boolean inInstantQ;
 	public boolean queStatusChecked = false;
+	public float rating;
+	public Float userRating;
 	public String id;
 	
 	public NetflixTitle(Document rootElement)
@@ -35,6 +39,7 @@ public class NetflixTitle {
 	}
 	public NetflixTitle(Element titleElement)
 	{
+		userRating = null;
 		//TODO: push these assignments into functions so we can handle exceptions better
 		NodeList titles = titleElement.getElementsByTagName("title");
 		NamedNodeMap titleAttributes = titles.item(0).getAttributes();
@@ -43,6 +48,10 @@ public class NetflixTitle {
 		NodeList synopsees = titleElement.getElementsByTagName("synopsis");
 		NodeList formats = titleElement.getElementsByTagName("delivery_formats");
 		year = titleElement.getElementsByTagName("release_year").item(0).getChildNodes().item(0).getNodeValue();
+		
+		rating = Float.parseFloat(titleElement.getElementsByTagName("average_rating").item(0).getChildNodes().item(0).getNodeValue());
+		rating = rating * 2;
+		rating = (float) Math.round(rating) / 2;
 		
 		checkAvailablilty(formats);
 		
@@ -65,6 +74,46 @@ public class NetflixTitle {
 		{
 			NodeList id = titleElement.getElementsByTagName("id");
 			idUrl = id.item(0).getChildNodes().item(0).getNodeValue();
+		}
+	}
+	
+	public Float getUserRating(NetflixDataRetriever retriever)
+	{
+		if(userRating != null)
+		{
+			return userRating;
+		}
+		else
+		{
+			try {
+				Document d = retriever.getUserRating(idUrl);
+				try {
+				userRating = Float.parseFloat(d.getElementsByTagName("user_rating").item(0).getChildNodes().item(0).getNodeValue());
+				} catch (NullPointerException e){
+					//whatevs
+				}
+			} catch (OAuthExpectationFailedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (OAuthCommunicationException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (ParserConfigurationException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (SAXException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (OAuthException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (NumberFormatException e) {
+				//no biggie
+			}
+			return userRating;
 		}
 	}
 	
@@ -325,4 +374,5 @@ public class NetflixTitle {
 			e.printStackTrace();
 		}
 	}
+	
 }
