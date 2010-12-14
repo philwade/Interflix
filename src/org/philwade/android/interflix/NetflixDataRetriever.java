@@ -401,4 +401,23 @@ public class NetflixDataRetriever {
 		Document d = fetchDocument(url);
 		return d;
 	}
+	
+	public void setRating(int rating, String titleUrl) throws OAuthExpectationFailedException, OAuthCommunicationException, ParserConfigurationException, SAXException, IOException, OAuthException
+	{
+		setRating(rating, titleUrl, null);
+	}
+	public void setRating(int rating, String titleUrl, String ratingId) throws OAuthExpectationFailedException, OAuthCommunicationException, ParserConfigurationException, SAXException, IOException, OAuthException
+	{
+		String base_url = "";
+		if(ratingId == null)
+		{
+			base_url ="http://api.netflix.com/users/" + userId + "/ratings/title/actual";
+		}
+		else
+		{
+			base_url ="http://api.netflix.com/users/" + userId + "/ratings/title/actual/" + ratingId;
+		}
+		String url = base_url + "?title_refs=" + titleUrl + "&rating=" + rating;
+		Document d = fetchDocument(url, HTTP_POST, null);
+	}
 }

@@ -12,6 +12,7 @@ import org.w3c.dom.Document;
 import org.xml.sax.SAXException;
 
 import android.app.Activity;
+import android.app.Dialog;
 import android.content.res.Resources;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
@@ -24,6 +25,7 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.RatingBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 public class TitleActivity extends Activity
 {
@@ -31,8 +33,11 @@ public class TitleActivity extends Activity
 	public String intentUrl;
 	public Button queButton;
 	public Button instantQueButton;
+	public Button rateThisButton;
 	public TextView inDVDQText;
 	public TextView inInstantQText;
+	public Dialog rateDialog;
+	private static final int RATE_DIALOG = 0;
 	private Float userRating;
 	private NetflixDataRetriever retriever;
 	public void onCreate(Bundle savedInstanceState)
@@ -51,6 +56,12 @@ public class TitleActivity extends Activity
 		queButton.setOnClickListener(addListener);
 		inDVDQText = (TextView) findViewById(R.id.inq_text);
 		inInstantQText = (TextView) findViewById(R.id.inq_instant_text);
+		rateThisButton = (Button) findViewById(R.id.rateThis);
+		rateThisButton.setOnClickListener(new OnClickListener() {
+			public void onClick(View v) {
+				showDialog(RATE_DIALOG);
+			}
+		});
 		retriever = new NetflixDataRetriever(getSharedPreferences(InterFlix.PREFS_FILE, 0));
 		getTitleData();
 	}
@@ -88,22 +99,21 @@ public class TitleActivity extends Activity
 				instantQueButton.setEnabled(title.instantAvailable());
 			}
 		
+			RatingBar ratingDisplay;
 			if(userRating != null)
 			{
-				RatingBar ratingDisplay = (RatingBar) findViewById(R.id.userRatingbar);
+				ratingDisplay = (RatingBar) findViewById(R.id.userRatingbar);
 				ratingDisplay.setRating(userRating);
 				ratingDisplay.setVisibility(View.VISIBLE);
 				ratingDisplay.setIsIndicator(true);
 			}
 			else
 			{	
-				RatingBar ratingDisplay = (RatingBar) findViewById(R.id.ratingbar);
+				ratingDisplay = (RatingBar) findViewById(R.id.ratingbar);
 				ratingDisplay.setRating(title.rating);
 				ratingDisplay.setVisibility(View.VISIBLE);
 				ratingDisplay.setIsIndicator(true);
 			}
-			
-			
 		}
 	};
 	
@@ -134,7 +144,33 @@ public class TitleActivity extends Activity
 		t.start();
 	}
 	
+	@Override
+	protected Dialog onCreateDialog(int id)
+	{
+		switch(id)
+		{
+			case RATE_DIALOG:
+				rateDialog = new Dialog(this);
+				rateDialog.setTitle("Rate this title");
+				rateDialog.setContentView(R.layout.rate_title_dialog);
+				Button okButton = (Button) rateDialog.findViewById(R.id.rate_pick_ok);
+				okButton.setOnClickListener(new OnClickListener(){
+					public void onClick(View v) {
+						// TODO Auto-generated method stub
+						RatingBar rating = (RatingBar) rateDialog.findViewById(R.id.popupRatingbar);
+						doRating(rating.getRating());
+						rateDialog.dismiss();
+					}
+				});
+				return rateDialog;
+		}
+		return null;
+	}
 	
+	public void doRating(float rating)
+	{
+		Toast.makeText(this, Float.toString(rating), 3000).show();
+	}
 	public OnClickListener addListener = new OnClickListener()
 	{
 		public void onClick(View v) {

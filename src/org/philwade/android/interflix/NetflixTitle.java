@@ -31,6 +31,7 @@ public class NetflixTitle {
 	public boolean queStatusChecked = false;
 	public float rating;
 	public Float userRating;
+	public String ratingId;
 	public String id;
 	private final static String TAG = "NetflixTitle";
 	
@@ -90,7 +91,8 @@ public class NetflixTitle {
 			try {
 				Document d = retriever.getUserRating(idUrl);
 				try {
-				userRating = Float.parseFloat(d.getElementsByTagName("user_rating").item(0).getChildNodes().item(0).getNodeValue());
+					userRating = Float.parseFloat(d.getElementsByTagName("user_rating").item(0).getChildNodes().item(0).getNodeValue());
+					ratingId = d.getElementsByTagName("id").item(0).getChildNodes().item(0).getNodeValue();
 				} catch (NullPointerException e){
 					//we don't care here
 				}
@@ -374,6 +376,58 @@ public class NetflixTitle {
 		} catch (SAXException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
+		}
+	}
+	
+	public void rate(int rating, NetflixDataRetriever retriever)
+	{
+		if((userRating != null) && (ratingId != null))
+		{
+			try {
+				retriever.setRating(rating, idUrl, ratingId);
+			} catch (OAuthExpectationFailedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (OAuthCommunicationException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (ParserConfigurationException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (SAXException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (OAuthException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		else
+		{
+			try {
+				retriever.setRating(rating, idUrl);
+			} catch (OAuthExpectationFailedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (OAuthCommunicationException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (ParserConfigurationException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (SAXException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (OAuthException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		}
 	}
 	
