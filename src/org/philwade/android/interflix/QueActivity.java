@@ -10,6 +10,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
+import android.util.Log;
 import android.view.ContextMenu;
 import android.view.LayoutInflater;
 import android.view.MenuInflater;
@@ -22,6 +23,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.RatingBar;
 import android.widget.TextView;
 import android.widget.AdapterView.AdapterContextMenuInfo;
 import android.widget.AdapterView.OnItemClickListener;
@@ -210,6 +212,10 @@ public abstract class QueActivity extends ListActivity {
 	    			ImageView iv = (ImageView) v.findViewById(R.id.list_title_cover);
 	    			iv.setImageResource(R.drawable.loading);
 	    			retriever.fetchImageOnThread(title.coverArt, iv);
+	    			RatingBar rating = (RatingBar) v.findViewById(R.id.queListRatingbar);
+	    			rating.setRating(title.rating);
+	    			Log.d("QueActivity", "" + title.rating);
+	    			Log.d("QueActivity", "" + rating.getRating());
 	    		}
 	    		return v;
 	    	}

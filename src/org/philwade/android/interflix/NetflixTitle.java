@@ -32,6 +32,7 @@ public class NetflixTitle {
 	public float rating;
 	public Float userRating;
 	public String id;
+	private final static String TAG = "NetflixTitle";
 	
 	public NetflixTitle(Document rootElement)
 	{
@@ -52,6 +53,7 @@ public class NetflixTitle {
 		rating = Float.parseFloat(titleElement.getElementsByTagName("average_rating").item(0).getChildNodes().item(0).getNodeValue());
 		rating = rating * 2;
 		rating = (float) Math.round(rating) / 2;
+		Log.d(TAG, title + " " + rating);
 		
 		checkAvailablilty(formats);
 		

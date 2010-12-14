@@ -30,5 +30,12 @@
 				style="@style/default_text"
     			android:id="@+id/list_title_year"
     			android:textSize="20sp" />
+   			<RatingBar android:id="@+id/queListRatingbar"
+		        android:layout_width="wrap_content"
+		        android:isIndicator="true"
+		        android:layout_height="wrap_content"
+		        android:numStars="5"
+		        android:stepSize="0.5"
+		        style="@style/interRate"/>
 		</LinearLayout>
 </LinearLayout>
