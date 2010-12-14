@@ -90,7 +90,7 @@ public class NetflixTitle {
 				try {
 				userRating = Float.parseFloat(d.getElementsByTagName("user_rating").item(0).getChildNodes().item(0).getNodeValue());
 				} catch (NullPointerException e){
-					//whatevs
+					//we don't care here
 				}
 			} catch (OAuthExpectationFailedException e) {
 				// TODO Auto-generated catch block

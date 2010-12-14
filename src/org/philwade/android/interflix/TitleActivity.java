@@ -33,6 +33,7 @@ public class TitleActivity extends Activity
 	public Button instantQueButton;
 	public TextView inDVDQText;
 	public TextView inInstantQText;
+	private Float userRating;
 	private NetflixDataRetriever retriever;
 	public void onCreate(Bundle savedInstanceState)
 	{
@@ -87,7 +88,6 @@ public class TitleActivity extends Activity
 				instantQueButton.setEnabled(title.instantAvailable());
 			}
 		
-			Float userRating = title.getUserRating(retriever);
 			if(userRating != null)
 			{
 				RatingBar ratingDisplay = (RatingBar) findViewById(R.id.userRatingbar);
@@ -125,6 +125,7 @@ public class TitleActivity extends Activity
 				if(node != null)
 				{
 					title = new NetflixTitle(node);
+					userRating = title.getUserRating(retriever);
 					titleHandler.post(fillInTitle);
 				}
 			}
@@ -132,6 +133,7 @@ public class TitleActivity extends Activity
 		
 		t.start();
 	}
+	
 	
 	public OnClickListener addListener = new OnClickListener()
 	{
