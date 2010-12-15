@@ -10,6 +10,13 @@
 		        android:numStars="5"
 		        android:stepSize="1.0"
 		        style="@style/alreadyRated"/> 
+					<CheckBox
+					android:id="@+id/rate_pick_not_interested"
+        			android:layout_width="wrap_content"
+        			android:layout_height="wrap_content"
+					android:button="@drawable/not_interested_checkbox"					
+					android:text="Not Interested"
+					/>
 		        <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     			android:layout_width="fill_parent"
     			android:layout_height="fill_parent" >
