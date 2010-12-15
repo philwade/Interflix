@@ -31,6 +31,7 @@ import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.client.methods.HttpDelete;
+import org.apache.http.client.methods.HttpPut;
 import org.apache.http.client.methods.HttpRequestBase;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.message.BasicNameValuePair;
@@ -233,7 +234,7 @@ public class NetflixDataRetriever {
     	
     	if(parameters != null)
     	{
-    		addPostParams((HttpPost) request, parameters);
+			addPostParams((HttpPost) request, parameters);
     	}
     	
     	if(signed)
@@ -408,16 +409,20 @@ public class NetflixDataRetriever {
 	}
 	public void setRating(int rating, String titleUrl, String ratingId) throws OAuthExpectationFailedException, OAuthCommunicationException, ParserConfigurationException, SAXException, IOException, OAuthException
 	{
-		String base_url = "";
+		String url = "";
+		int method = HTTP_POST;
+		HashMap<String, String> parameters = new HashMap<String, String>();
 		if(ratingId == null)
 		{
-			base_url ="http://api.netflix.com/users/" + userId + "/ratings/title/actual";
+			url ="http://api.netflix.com/users/" + userId + "/ratings/title/actual";
+			parameters.put("title_ref", titleUrl);
 		}
 		else
 		{
-			base_url ="http://api.netflix.com/users/" + userId + "/ratings/title/actual/" + ratingId;
+			url = ratingId;
+			parameters.put("method", "PUT"); //android doesn't really like actual PUT, so we override
 		}
-		String url = base_url + "?title_refs=" + titleUrl + "&rating=" + rating;
-		Document d = fetchDocument(url, HTTP_POST, null);
+		parameters.put("rating", Integer.toString(rating));
+		Document d = fetchDocument(url, method, parameters);
 	}
 }

@@ -11,7 +11,6 @@ public class InstantQueActivity extends QueActivity {
 			ListView lv = getListView();
 			lv.setOnItemClickListener(clickListener);
 			lv.addFooterView(moreButton);
-			
 			setListAdapter(new TitleAdapter(this, R.layout.quelist));
 			getQueContents();
 		}

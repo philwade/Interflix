@@ -18,6 +18,7 @@ import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.Handler;
 import android.text.Html;
+import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.view.View.OnClickListener;
@@ -38,6 +39,7 @@ public class TitleActivity extends Activity
 	public TextView inInstantQText;
 	public Dialog rateDialog;
 	private static final int RATE_DIALOG = 0;
+	private static final String TAG = "TitleActivity";
 	private Float userRating;
 	private NetflixDataRetriever retriever;
 	public void onCreate(Bundle savedInstanceState)
@@ -63,7 +65,7 @@ public class TitleActivity extends Activity
 			}
 		});
 		retriever = new NetflixDataRetriever(getSharedPreferences(InterFlix.PREFS_FILE, 0));
-		getTitleData();
+		refreshTitle();
 	}
 	
 	final Handler titleHandler = new Handler();
@@ -117,33 +119,6 @@ public class TitleActivity extends Activity
 		}
 	};
 	
-	public void getTitleData()
-	{
-		setProgressBarIndeterminateVisibility(true);
-		Thread t = new Thread()
-		{
-			public void run()
-			{
-				Document node = null;
-				try{
-					node = retriever.fetchDocument(intentUrl+"?expand=synopsis,formats");
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-				
-				
-				if(node != null)
-				{
-					title = new NetflixTitle(node);
-					userRating = title.getUserRating(retriever);
-					titleHandler.post(fillInTitle);
-				}
-			}
-		};
-		
-		t.start();
-	}
-	
 	@Override
 	protected Dialog onCreateDialog(int id)
 	{
@@ -154,6 +129,7 @@ public class TitleActivity extends Activity
 				rateDialog.setTitle("Rate this title");
 				rateDialog.setContentView(R.layout.rate_title_dialog);
 				Button okButton = (Button) rateDialog.findViewById(R.id.rate_pick_ok);
+				Button cancelButton = (Button) rateDialog.findViewById(R.id.rate_pick_cancel);
 				okButton.setOnClickListener(new OnClickListener(){
 					public void onClick(View v) {
 						// TODO Auto-generated method stub
@@ -162,15 +138,30 @@ public class TitleActivity extends Activity
 						rateDialog.dismiss();
 					}
 				});
+				cancelButton.setOnClickListener(new OnClickListener(){
+					public void onClick(View v) {
+						removeDialog(RATE_DIALOG);
+					}
+				});
 				return rateDialog;
 		}
 		return null;
 	}
 	
-	public void doRating(float rating)
+	public void doRating(final float rating)
 	{
-		Toast.makeText(this, Float.toString(rating), 3000).show();
+			setProgressBarIndeterminateVisibility(true);
+			Thread t = new Thread()
+			{
+				public void run()
+				{
+					title.rate((int) rating, retriever);
+					refreshTitle();
+				}
+			};
+			t.start();
 	}
+	
 	public OnClickListener addListener = new OnClickListener()
 	{
 		public void onClick(View v) {
@@ -180,31 +171,8 @@ public class TitleActivity extends Activity
 			{
 				public void run()
 				{
-					Document node = null;
 					title.addToDVDQue(retriever);
-					try {
-						node = retriever.fetchDocument(intentUrl+"?expand=synopsis,formats");
-					} catch (OAuthExpectationFailedException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					} catch (OAuthCommunicationException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					} catch (ParserConfigurationException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					} catch (SAXException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					} catch (IOException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					} catch (OAuthException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					}
-					title = new NetflixTitle(node);
-					titleHandler.post(fillInTitle);
+					refreshTitle();
 				}
 			};
 			t.start();
@@ -219,34 +187,40 @@ public class TitleActivity extends Activity
 			{
 				public void run()
 				{
-					Document node = null;
 					title.addToInstantQue(retriever);
-					try {
-						node = retriever.fetchDocument(intentUrl+"?expand=synopsis,formats");
-					} catch (OAuthExpectationFailedException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					} catch (OAuthCommunicationException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					} catch (ParserConfigurationException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					} catch (SAXException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					} catch (IOException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					} catch (OAuthException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					}
-					title = new NetflixTitle(node);
-					titleHandler.post(fillInTitle);
+					refreshTitle();
 				}
 			};
 			t.start();
 		}
 	};
+	
+	public void refreshTitle()
+	{
+		Document node = null;
+		try {
+			node = retriever.fetchDocument(intentUrl+"?expand=synopsis,formats");
+		} catch (OAuthExpectationFailedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (OAuthCommunicationException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (ParserConfigurationException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (SAXException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (OAuthException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		title = new NetflixTitle(node);
+		userRating = title.getUserRating(retriever);
+		titleHandler.post(fillInTitle);
+	}
 }

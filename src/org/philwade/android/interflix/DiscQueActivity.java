@@ -13,7 +13,6 @@ public class DiscQueActivity extends QueActivity {
 			lv.setOnItemClickListener(clickListener);
 			lv.addFooterView(moreButton);
 			setListAdapter(new TitleAdapter(this, R.layout.quelist));
-			showDialog(PROGRESS_DIALOG);
 			getQueContents();
 	}
 	

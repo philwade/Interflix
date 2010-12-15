@@ -33,6 +33,7 @@ public class NetflixTitle {
 	public Float userRating;
 	public String ratingId;
 	public String id;
+	public final static float CANT_HAVE_RATING = -1; //stuff like individual discs from a series cannot have a rating
 	private final static String TAG = "NetflixTitle";
 	
 	public NetflixTitle(Document rootElement)
@@ -51,10 +52,15 @@ public class NetflixTitle {
 		NodeList formats = titleElement.getElementsByTagName("delivery_formats");
 		year = titleElement.getElementsByTagName("release_year").item(0).getChildNodes().item(0).getNodeValue();
 		
-		rating = Float.parseFloat(titleElement.getElementsByTagName("average_rating").item(0).getChildNodes().item(0).getNodeValue());
-		rating = rating * 2;
-		rating = (float) Math.round(rating) / 2;
-		Log.d(TAG, title + " " + rating);
+		try{
+			rating = Float.parseFloat(titleElement.getElementsByTagName("average_rating").item(0).getChildNodes().item(0).getNodeValue());
+			rating = rating * 2;
+			rating = (float) Math.round(rating) / 2;
+			Log.d(TAG, title + " " + rating);
+		} catch (NullPointerException e){ 
+			Log.d(TAG, title + " has no rating");
+			rating = CANT_HAVE_RATING;
+		}
 		
 		checkAvailablilty(formats);
 		
@@ -84,6 +90,7 @@ public class NetflixTitle {
 	{
 		if(userRating != null)
 		{
+					Log.d(TAG, "returning already set rating");
 			return userRating;
 		}
 		else
@@ -91,8 +98,10 @@ public class NetflixTitle {
 			try {
 				Document d = retriever.getUserRating(idUrl);
 				try {
+					Log.d(TAG, "trying to pull in rating");
 					userRating = Float.parseFloat(d.getElementsByTagName("user_rating").item(0).getChildNodes().item(0).getNodeValue());
 					ratingId = d.getElementsByTagName("id").item(0).getChildNodes().item(0).getNodeValue();
+					ratingId = ratingId.replaceFirst("/title/", "/title/actual/");
 				} catch (NullPointerException e){
 					//we don't care here
 				}
