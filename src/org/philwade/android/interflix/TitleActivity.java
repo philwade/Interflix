@@ -13,12 +13,9 @@ import org.xml.sax.SAXException;
 
 import android.app.Activity;
 import android.app.Dialog;
-import android.content.res.Resources;
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.Handler;
 import android.text.Html;
-import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.view.View.OnClickListener;
@@ -26,7 +23,6 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.RatingBar;
 import android.widget.TextView;
-import android.widget.Toast;
 
 public class TitleActivity extends Activity
 {
@@ -132,7 +128,6 @@ public class TitleActivity extends Activity
 				Button cancelButton = (Button) rateDialog.findViewById(R.id.rate_pick_cancel);
 				okButton.setOnClickListener(new OnClickListener(){
 					public void onClick(View v) {
-						// TODO Auto-generated method stub
 						RatingBar rating = (RatingBar) rateDialog.findViewById(R.id.popupRatingbar);
 						doRating(rating.getRating());
 						rateDialog.dismiss();
@@ -156,6 +151,7 @@ public class TitleActivity extends Activity
 				public void run()
 				{
 					title.rate((int) rating, retriever);
+					titleHandler.post(HideRatingBars);
 					refreshTitle();
 				}
 			};
@@ -192,6 +188,17 @@ public class TitleActivity extends Activity
 				}
 			};
 			t.start();
+		}
+	};
+	
+	public final Runnable HideRatingBars = new Runnable()
+	{
+		
+		public void run() {
+			RatingBar publicRating = (RatingBar) findViewById(R.id.ratingbar);
+			publicRating.setVisibility(View.INVISIBLE);
+			RatingBar mUserRating = (RatingBar) findViewById(R.id.userRatingbar);
+			mUserRating.setVisibility(View.INVISIBLE);
 		}
 	};
 	
