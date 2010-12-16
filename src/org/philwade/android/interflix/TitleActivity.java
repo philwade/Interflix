@@ -20,9 +20,13 @@ import android.view.View;
 import android.view.Window;
 import android.view.View.OnClickListener;
 import android.widget.Button;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.RatingBar;
 import android.widget.TextView;
+import android.widget.CompoundButton.OnCheckedChangeListener;
+import android.widget.RatingBar.OnRatingBarChangeListener;
 
 public class TitleActivity extends Activity
 {
@@ -126,6 +130,25 @@ public class TitleActivity extends Activity
 				rateDialog.setContentView(R.layout.rate_title_dialog);
 				Button okButton = (Button) rateDialog.findViewById(R.id.rate_pick_ok);
 				Button cancelButton = (Button) rateDialog.findViewById(R.id.rate_pick_cancel);
+				final RatingBar rater = (RatingBar) rateDialog.findViewById(R.id.popupRatingbar);
+				final CheckBox notInterested = (CheckBox) rateDialog.findViewById(R.id.rate_pick_not_interested);
+				rater.setOnRatingBarChangeListener(new OnRatingBarChangeListener(){
+					public void onRatingChanged(RatingBar ratingBar,
+							float rating, boolean fromUser) {
+						notInterested.setChecked(false);
+					}
+				});
+				notInterested.setOnCheckedChangeListener(new OnCheckedChangeListener(){
+					public void onCheckedChanged(CompoundButton buttonView,
+							boolean isChecked) {
+						if(isChecked)
+						{
+							rater.setRating(0);
+							buttonView.setChecked(isChecked);
+						}
+						
+					}
+				});
 				okButton.setOnClickListener(new OnClickListener(){
 					public void onClick(View v) {
 						RatingBar rating = (RatingBar) rateDialog.findViewById(R.id.popupRatingbar);
