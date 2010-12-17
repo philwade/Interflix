@@ -104,10 +104,22 @@ public class TitleActivity extends Activity
 			RatingBar ratingDisplay;
 			if(userRating != null)
 			{
+				CheckBox notInterested = (CheckBox) findViewById(R.id.title_not_interested);
 				ratingDisplay = (RatingBar) findViewById(R.id.userRatingbar);
-				ratingDisplay.setRating(userRating);
 				ratingDisplay.setVisibility(View.VISIBLE);
+				notInterested.setEnabled(false);
 				ratingDisplay.setIsIndicator(true);
+				if(userRating == NetflixTitle.NOT_INTERESTED)
+				{
+					ratingDisplay.setRating(0);
+					notInterested.setChecked(true);
+					notInterested.setVisibility(View.VISIBLE);
+				}
+				else
+				{
+					ratingDisplay.setRating(userRating);
+					notInterested.setChecked(false);
+				}
 			}
 			else
 			{	
@@ -151,8 +163,16 @@ public class TitleActivity extends Activity
 				});
 				okButton.setOnClickListener(new OnClickListener(){
 					public void onClick(View v) {
-						RatingBar rating = (RatingBar) rateDialog.findViewById(R.id.popupRatingbar);
-						doRating(rating.getRating());
+						float setRating;
+						if(notInterested.isChecked())
+						{
+							setRating = NetflixTitle.NOT_INTERESTED;
+						}
+						else
+						{
+							setRating = rater.getRating();
+						}
+						doRating(setRating);
 						rateDialog.dismiss();
 					}
 				});
@@ -222,6 +242,8 @@ public class TitleActivity extends Activity
 			publicRating.setVisibility(View.INVISIBLE);
 			RatingBar mUserRating = (RatingBar) findViewById(R.id.userRatingbar);
 			mUserRating.setVisibility(View.INVISIBLE);
+			CheckBox mCheckBox = (CheckBox) findViewById(R.id.title_not_interested);
+			mCheckBox.setVisibility(View.INVISIBLE);
 		}
 	};
 	

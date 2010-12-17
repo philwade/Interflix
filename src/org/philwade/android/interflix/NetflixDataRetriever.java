@@ -422,7 +422,14 @@ public class NetflixDataRetriever {
 			url = ratingId;
 			parameters.put("method", "PUT"); //android doesn't really like actual PUT, so we override
 		}
-		parameters.put("rating", Integer.toString(rating));
+		if(rating != NetflixTitle.NOT_INTERESTED)
+		{
+			parameters.put("rating", Integer.toString(rating));
+		}
+		else
+		{
+			parameters.put("rating", "not_interested");
+		}
 		Document d = fetchDocument(url, method, parameters);
 	}
 }

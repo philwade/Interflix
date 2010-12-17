@@ -28,28 +28,48 @@
     			android:id="@+id/title_synopsis"
     			android:textSize="16sp" 
     			android:layout_below="@id/title_title" />
-    			<RatingBar android:id="@+id/ratingbar"
-		        android:layout_width="wrap_content"
-		        android:layout_height="wrap_content"
-		        android:isIndicator="true"
-		        android:numStars="5"
-		        android:stepSize="0.5"
-    			android:visibility="invisible"
-		        style="@style/interRate"/>
-    			<RatingBar android:id="@+id/userRatingbar"
-		        android:layout_width="wrap_content"
-		        android:layout_height="wrap_content"
-		        android:isIndicator="true"
-		        android:numStars="5"
-		        android:stepSize="1.0"
-    			android:visibility="invisible"
-		        style="@style/alreadyRated"/>
-		        <Button xmlns:android="http://schemas.android.com/apk/res/android"
-    			android:layout_width="wrap_content"
-    			android:layout_height="wrap_content"
-    			android:text="Rate this title"
-    			android:id="@+id/rateThis"
-    			/>
+    			<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    			android:orientation="horizontal"
+    			style="@style/default_text"
+    			android:layout_width="fill_parent"
+    			android:layout_height="wrap_content" >
+    				<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    				android:orientation="vertical"
+    				style="@style/default_text"
+    				android:layout_width="wrap_content"
+    				android:layout_height="wrap_content" >
+    					<RatingBar android:id="@+id/ratingbar"
+		        		android:layout_width="wrap_content"
+		        		android:layout_height="wrap_content"
+		        		android:isIndicator="true"
+		        		android:numStars="5"
+		        		android:stepSize="0.5"
+    					android:visibility="invisible"
+		        		style="@style/interRate"/>
+    					<RatingBar android:id="@+id/userRatingbar"
+		        		android:layout_width="wrap_content"
+		        		android:layout_height="wrap_content"
+		        		android:isIndicator="true"
+		        		android:numStars="5"
+		        		android:stepSize="1.0"
+    					android:visibility="invisible"
+		        		style="@style/alreadyRated"/>
+		        		<CheckBox
+						android:id="@+id/title_not_interested"
+        				android:layout_width="wrap_content"
+        				android:layout_height="wrap_content"
+						android:button="@drawable/not_interested_checkbox"					
+	    				android:visibility="invisible"
+						android:text="Not Interested"
+						/>
+					</LinearLayout>
+		        	<Button xmlns:android="http://schemas.android.com/apk/res/android"
+    				android:layout_width="wrap_content"
+    				android:layout_height="wrap_content"
+    				android:text="Rate this title"
+    				android:id="@+id/rateThis"
+    				/>
+    			</LinearLayout>
    				<TextView  
 				android:id="@+id/inq_text"
 				android:textSize="15pt"
