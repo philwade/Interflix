@@ -6,6 +6,6 @@
 		/>
 	<item
 		android:state_enabled="false"
-		android:color="#5F6F7F"
+		android:color="#8E9FAF"
 		/>
 </selector>

@@ -35,8 +35,6 @@ public class TitleActivity extends Activity
 	public Button queButton;
 	public Button instantQueButton;
 	public Button rateThisButton;
-	public TextView inDVDQText;
-	public TextView inInstantQText;
 	public Dialog rateDialog;
 	private static final int RATE_DIALOG = 0;
 	private static final String TAG = "TitleActivity";
@@ -56,8 +54,6 @@ public class TitleActivity extends Activity
 		instantQueButton.setOnClickListener(instantAddListener);
 		queButton = (Button) findViewById(R.id.addQueue);
 		queButton.setOnClickListener(addListener);
-		inDVDQText = (TextView) findViewById(R.id.inq_text);
-		inInstantQText = (TextView) findViewById(R.id.inq_instant_text);
 		rateThisButton = (Button) findViewById(R.id.rateThis);
 		rateThisButton.setOnClickListener(new OnClickListener() {
 			public void onClick(View v) {
@@ -84,20 +80,28 @@ public class TitleActivity extends Activity
 			retriever.fetchImageOnThread(title.coverArt, coverView);
 			if(title.inDVDQ(retriever))
 			{
-				inDVDQText.setVisibility(View.VISIBLE);
 				queButton.setEnabled(false);
+				queButton.setText(R.string.inq_text);
 			}
 			else
 			{
+				if(!title.discAvailable())
+				{
+					queButton.setText(R.string.disc_unavailable);
+				}
 				queButton.setEnabled(title.discAvailable());
 			}
 			if(title.inInstantQ(retriever))
 			{
-				inInstantQText.setVisibility(View.VISIBLE);
 				instantQueButton.setEnabled(false);
+				instantQueButton.setText(R.string.inq_instant_text);
 			}
 			else
 			{
+				if(!title.instantAvailable())
+				{
+					instantQueButton.setText(R.string.instant_unavailable);
+				}
 				instantQueButton.setEnabled(title.instantAvailable());
 			}
 		

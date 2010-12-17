@@ -19,4 +19,6 @@
     <string name="addq_instant_text">Add to Instant Que</string>
     <string name="addq_dvd_text">Add to DVD Que</string>
     <string name="load_more_text">Load More...</string>
+    <string name="instant_unavailable">Instant Unavailable</string>
+    <string name="disc_unavailable">Disc Unavailable</string>
 </resources>
