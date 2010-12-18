@@ -6,6 +6,6 @@
 		/>
 	<item
 		android:state_enabled="false"
-		android:color="#BF8384"
+		android:color="@color/flix_red_grey"
 		/>
 </selector>

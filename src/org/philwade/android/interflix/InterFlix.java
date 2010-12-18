@@ -60,8 +60,6 @@ public class InterFlix extends Activity {
     	que.setOnClickListener(queListener());
     	ImageButton search = (ImageButton) findViewById(R.id.search_link_view);
     	search.setOnClickListener(searchListener());
-    	//TextView clear = (TextView) findViewById(R.id.clear_link_view);
-    	//clear.setOnClickListener(clearListener());
     }
     
     @Override
@@ -84,7 +82,7 @@ public class InterFlix extends Activity {
     	{
     		case SETUP_DIALOG:
     			AlertDialog.Builder builder = new AlertDialog.Builder(this);
-    			builder.setMessage("Welcome to Interflix. Since this is your first time using the program, we just need to setup your account.");
+    			builder.setMessage("Welcome to Interflicks. Since this is your first time using the program, we just need to setup your account.");
     			builder.setCancelable(false);
     			builder.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
 					public void onClick(DialogInterface dialog, int which) {
