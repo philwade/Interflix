@@ -33,6 +33,8 @@ public abstract class QueActivity extends ListActivity {
 	protected static final int NUMBER_PICK_DIALOG = 2;	
 	protected static final int LOAD_MORE_ID = 1;	
 	protected int QUE_OFFSET = 0;
+	protected int queLength = 0;
+	protected int displayCount = 0; //number of titles we're displaying
 	protected boolean firstLoad = true;
 	protected boolean appendNew = true;
 	public Dialog pickerDialog;
@@ -57,12 +59,6 @@ public abstract class QueActivity extends ListActivity {
 			removeDialog(PROGRESS_DIALOG);
 			if(queItems != null)
 			{
-				if(queItems.length < NetflixDataRetriever.OFFSET_INCREMENT)
-				{
-					//when we get less than we asked for, turn off button
-					moreButton.setEnabled(false);
-					//TODO: find a better way to know when we hit bottom
-				}
 				TitleAdapter la = (TitleAdapter) getListAdapter();
 				if(firstLoad == true || appendNew == false)
 				{
@@ -73,7 +69,16 @@ public abstract class QueActivity extends ListActivity {
 				
 				for(NetflixTitle item : queItems)
 				{
-					la.add(item);
+					displayCount++;
+					if(displayCount <= queLength)
+					{
+						la.add(item);
+					}
+					
+					if(displayCount == queLength)
+					{
+						moreButton.setEnabled(false);
+					}
 				}
 				la.notifyDataSetChanged();
 			}
@@ -176,6 +181,7 @@ public abstract class QueActivity extends ListActivity {
 		firstLoad = true; 
 		QUE_OFFSET = 0;
 		moreButton.setEnabled(true);
+		queLength = 0;
 	}
 	
 	final OnClickListener moreListener = new OnClickListener()

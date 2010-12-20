@@ -19,13 +19,23 @@ public class NetflixSearchRetriever extends NetflixDataRetriever {
 		super(prefs);
 	}
 	
-	public NetflixTitle[] getSearchTitles(String searchString) throws Exception
+	public NetflixTitle[] getSearchTitles(String searchString, Integer offset) throws Exception
 	{
 		String url = "http://api.netflix.com/catalog/titles?term=" + searchString + "&max_results=25"; 
+		if(offset != null)
+		{
+			url = url + "&start_index=" + offset;
+		}
 		Document xml = fetchDocument(url);
 		NodeList titleNodes = xml.getElementsByTagName("catalog_title");
 		NetflixTitle[] results = constructTitleObjects(titleNodes);
+		setResultsLength(xml);
 		return results;
+	}
+	
+	public NetflixTitle[] getSearchTitles(String searchString) throws Exception
+	{
+		return getSearchTitles(searchString, null);
 	}
 	
 	public String[] searchPeople(String term) throws OAuthExpectationFailedException, OAuthCommunicationException, OAuthException

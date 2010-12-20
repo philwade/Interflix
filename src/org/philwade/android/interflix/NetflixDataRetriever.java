@@ -74,6 +74,7 @@ public class NetflixDataRetriever {
     public String userId;
     public String userToken;
     public String userSecret;
+    public int resultsLength;
     
     public CommonsHttpOAuthConsumer consumer = new CommonsHttpOAuthConsumer(consumerKey, sharedSecret);
 	public CommonsHttpOAuthProvider provider = new CommonsHttpOAuthProvider(NETFLIX_REQUEST_TOKEN_URL, NETFLIX_ACCESS_TOKEN_URL, NETFLIX_AUTHORIZE_URL);
@@ -432,4 +433,10 @@ public class NetflixDataRetriever {
 		}
 		Document d = fetchDocument(url, method, parameters);
 	}
+	
+	protected void setResultsLength(Document xml)
+	{
+		resultsLength = Integer.parseInt(xml.getElementsByTagName("number_of_results").item(0).getChildNodes().item(0).getNodeValue());
+	}
+	
 }

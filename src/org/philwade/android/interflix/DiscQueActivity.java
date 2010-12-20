@@ -26,6 +26,7 @@ public class DiscQueActivity extends QueActivity {
 				NetflixQueRetriever queRetriever = new NetflixQueRetriever(getSharedPreferences(InterFlix.PREFS_FILE, 0));
 				try {
 					queItems = queRetriever.getDiscQue(QUE_OFFSET);
+					queLength = queRetriever.resultsLength;
 				} catch (Exception e) {
 					e.printStackTrace();
 				}

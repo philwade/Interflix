@@ -29,15 +29,16 @@ public class MovieSearch extends QueActivity {
 	public Button okButton;
 	public ListView lv;
 	public EditText editText;
+	public String currentSearch;
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        appendNew = false;
 		setContentView(R.layout.search);
         editText = (EditText) findViewById(R.id.entry);
         okButton = (Button) findViewById(R.id.ok);
-        setListAdapter(new TitleAdapter(getApplicationContext(), R.layout.quelist));
         ListView lv = getListView();
 		lv.setOnItemClickListener(clickListener);
+		lv.addFooterView(moreButton);
+        setListAdapter(new TitleAdapter(getApplicationContext(), R.layout.quelist));
 		okButton.setOnClickListener(searchListen);
 		
 		editText.setOnKeyListener(new OnKeyListener(){
@@ -64,6 +65,7 @@ public class MovieSearch extends QueActivity {
     public void doSearch()
     {
 			showDialog(PROGRESS_DIALOG);
+			appendNew = false;
 			getApplicationContext();
 			InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
 			imm.hideSoftInputFromWindow(editText.getWindowToken(), 0);
@@ -71,6 +73,7 @@ public class MovieSearch extends QueActivity {
 			try {
 				String term = editText.getEditableText().toString();
 				String cleanTerm = URLEncoder.encode(term);
+				currentSearch = cleanTerm;
 				retrieveResults(cleanTerm);
 			} catch (Exception e) {
 				Toast.makeText(getApplicationContext(), "Something horrible has happened", 3000).show();
@@ -89,6 +92,16 @@ public class MovieSearch extends QueActivity {
 				try {
 					searchRetriever = new NetflixSearchRetriever(getSharedPreferences(InterFlix.PREFS_FILE, 0));
 					queItems = searchRetriever.getSearchTitles(searchTerm);
+					queLength = searchRetriever.resultsLength;
+					
+					if(queLength > NetflixSearchRetriever.OFFSET_INCREMENT)
+					{
+						moreButton.setEnabled(true);
+					}
+					else
+					{
+						moreButton.setEnabled(false);
+					}
 				} catch (IOException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
@@ -96,6 +109,7 @@ public class MovieSearch extends QueActivity {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
+				QUE_OFFSET = QUE_OFFSET + NetflixSearchRetriever.OFFSET_INCREMENT;
 				queHandler.post(updateQue);
 			}
 				
@@ -105,8 +119,26 @@ public class MovieSearch extends QueActivity {
 
 	@Override
 	void getQueContents() {
-		// TODO Auto-generated method stub
-		
+		// adds to the end of the list
+		appendNew = true;
+		showDialog(PROGRESS_DIALOG);
+		Thread t = new Thread()
+		{
+			public void run()
+			{
+				try {
+					NetflixSearchRetriever searchRetriever = new NetflixSearchRetriever(getSharedPreferences(InterFlix.PREFS_FILE, 0));
+					queItems = searchRetriever.getSearchTitles(currentSearch, QUE_OFFSET);
+					queLength = searchRetriever.resultsLength;
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+				QUE_OFFSET = QUE_OFFSET + NetflixSearchRetriever.OFFSET_INCREMENT;
+				queHandler.post(updateQue);
+			}
+				
+		};
+		t.start();	
 	}
 
 	@Override

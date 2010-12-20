@@ -45,9 +45,10 @@ public class NetflixQueRetriever extends NetflixDataRetriever {
 		NodeList etagList = xml.getElementsByTagName("etag");
 		String etag = etagList.item(0).getChildNodes().item(0).getNodeValue();
 		saveEtag(etag);
+		setResultsLength(xml);
 		NodeList titleNodes = xml.getElementsByTagName("queue_item");
 		NetflixTitle[] results = constructTitleObjects(titleNodes);
 		return results;
 	}
-	
+
 }
