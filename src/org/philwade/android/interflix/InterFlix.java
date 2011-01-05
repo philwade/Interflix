@@ -13,6 +13,8 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.ImageButton;
@@ -172,8 +174,17 @@ public class InterFlix extends Activity {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-		}
     }
+
+	@Override
+	public boolean onCreateOptionsMenu(Menu menu)
+	{
+		MenuInflater inflator = getMenuInflater();
+		inflator.inflate(R.menu.home_menu, menu);
+		return true;
+	}
+	
+}
 
 
 		

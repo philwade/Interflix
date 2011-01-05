@@ -11,6 +11,8 @@
     <string name="load_more_text">Load More...</string>
     <string name="instant_unavailable">Instant Unavailable</string>
     <string name="disc_unavailable">Disc Unavailable</string>
+    <string name="menu_preferences">Preferences</string>
+    <string name="menu_users">Active User</string>
     <color name="flix_red">#B9090B</color>
     <color name="flix_grey">#D9D9D9</color>
     <color name="flix_red_grey">#BF8384</color>
