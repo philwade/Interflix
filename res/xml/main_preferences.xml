@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen
+  xmlns:android="http://schemas.android.com/apk/res/android">
+  <DialogPreference
+  	android:key="step amount"
+  	android:title="Number of titles to display"
+  	android:dialogLayout="@layout/number_picker_pref"
+  />
+</PreferenceScreen>
