@@ -37,12 +37,15 @@ public class TitleActivity extends Activity
 	public Button rateThisButton;
 	public Dialog rateDialog;
 	private static final int RATE_DIALOG = 0;
+	@SuppressWarnings("unused")
 	private static final String TAG = "TitleActivity";
 	private Float userRating;
 	private NetflixDataRetriever retriever;
+	private ErrorReceiver mErrorReceiver;
 	public void onCreate(Bundle savedInstanceState)
 	{
 		super.onCreate(savedInstanceState);
+		mErrorReceiver = new ErrorReceiver(this);
 		requestWindowFeature(Window.FEATURE_INDETERMINATE_PROGRESS);
 		setContentView(R.layout.title);
 		if(getIntent().hasExtra("idUrl"))
@@ -253,30 +256,40 @@ public class TitleActivity extends Activity
 	
 	public void refreshTitle()
 	{
-		Document node = null;
-		try {
-			node = retriever.fetchDocument(intentUrl+"?expand=synopsis,formats");
-		} catch (OAuthExpectationFailedException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (OAuthCommunicationException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (ParserConfigurationException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (SAXException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (OAuthException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		title = new NetflixTitle(node);
-		userRating = title.getUserRating(retriever);
-		titleHandler.post(fillInTitle);
+		setProgressBarIndeterminateVisibility(true);
+		Thread t = new Thread()
+		{
+			public void run()
+			{
+				Document node = null;
+				try {
+					node = retriever.fetchDocument(intentUrl+"?expand=synopsis,formats");
+					throw new OAuthExpectationFailedException(intentUrl);
+				} catch (OAuthExpectationFailedException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				} catch (OAuthCommunicationException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				} catch (ParserConfigurationException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				} catch (SAXException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				} catch (OAuthException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				title = new NetflixTitle(node);
+				userRating = title.getUserRating(retriever);
+				titleHandler.post(fillInTitle);
+			}
+		};
+		
+		t.start();
 	}
 }

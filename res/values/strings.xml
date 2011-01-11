@@ -13,6 +13,8 @@
     <string name="disc_unavailable">Disc Unavailable</string>
     <string name="menu_preferences">Preferences</string>
     <string name="menu_users">Active User</string>
+    <string name="network_error">Unable to connect to the internet.</string>
+    <string name="default_error">Something terrible has happened.</string>
     <color name="flix_red">#B9090B</color>
     <color name="flix_grey">#D9D9D9</color>
     <color name="flix_red_grey">#BF8384</color>
