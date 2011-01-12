@@ -41,6 +41,7 @@ public abstract class QueActivity extends ListActivity {
 	public Button moreButton;
 	public NetflixTitle[] queItems;
 	public NetflixTitle currentClickedTitle;
+	public ErrorReceiver mErrorReceiver;
 	public void onCreate(Bundle savedInstanceState) {
 		   super.onCreate(savedInstanceState);
 		   moreButton = new Button(this);

@@ -264,29 +264,26 @@ public class TitleActivity extends Activity
 				Document node = null;
 				try {
 					node = retriever.fetchDocument(intentUrl+"?expand=synopsis,formats");
-					throw new OAuthExpectationFailedException(intentUrl);
 				} catch (OAuthExpectationFailedException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
+					mErrorReceiver.sendEmptyMessage(ErrorReceiver.AUTH_FAIL);
 				} catch (OAuthCommunicationException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
+					mErrorReceiver.sendEmptyMessage(ErrorReceiver.AUTH_FAIL);
 				} catch (ParserConfigurationException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
+					mErrorReceiver.sendEmptyMessage(ErrorReceiver.PARSE_FAIL);
 				} catch (SAXException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
+					mErrorReceiver.sendEmptyMessage(ErrorReceiver.PARSE_FAIL);
 				} catch (IOException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
+					mErrorReceiver.sendEmptyMessage(ErrorReceiver.BROKEN_NETWORK);
 				} catch (OAuthException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
+					mErrorReceiver.sendEmptyMessage(ErrorReceiver.AUTH_FAIL);
 				}
-				title = new NetflixTitle(node);
-				userRating = title.getUserRating(retriever);
-				titleHandler.post(fillInTitle);
+				
+				if(node != null)
+				{
+					title = new NetflixTitle(node);
+					userRating = title.getUserRating(retriever);
+					titleHandler.post(fillInTitle);
+				}
 			}
 		};
 		

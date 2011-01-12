@@ -1,6 +1,15 @@
 package org.philwade.android.interflix;
 
+import java.io.IOException;
+
+import javax.xml.parsers.ParserConfigurationException;
+
+import oauth.signpost.exception.OAuthCommunicationException;
+import oauth.signpost.exception.OAuthException;
+import oauth.signpost.exception.OAuthExpectationFailedException;
+
 import org.philwade.android.interflix.R;
+import org.xml.sax.SAXException;
 
 import android.os.Bundle;
 import android.widget.ListView;
@@ -11,6 +20,7 @@ public class InstantQueActivity extends QueActivity {
 			ListView lv = getListView();
 			lv.setOnItemClickListener(clickListener);
 			lv.addFooterView(moreButton);
+			mErrorReceiver = new ErrorReceiver(this);
 			setListAdapter(new TitleAdapter(this, R.layout.quelist));
 			getQueContents();
 		}
@@ -25,10 +35,20 @@ public class InstantQueActivity extends QueActivity {
 				NetflixQueRetriever queRetriever = new NetflixQueRetriever(getSharedPreferences(InterFlix.PREFS_FILE, 0));
 				try {
 					queItems = queRetriever.getInstantQue(QUE_OFFSET);
-					queLength = queRetriever.resultsLength;
-				} catch (Exception e) {
-					e.printStackTrace();
+				} catch (OAuthExpectationFailedException e) {
+					mErrorReceiver.sendEmptyMessage(ErrorReceiver.AUTH_FAIL);
+				} catch (OAuthCommunicationException e) {
+					mErrorReceiver.sendEmptyMessage(ErrorReceiver.AUTH_FAIL);
+				} catch (ParserConfigurationException e) {
+					mErrorReceiver.sendEmptyMessage(ErrorReceiver.PARSE_FAIL);
+				} catch (SAXException e) {
+					mErrorReceiver.sendEmptyMessage(ErrorReceiver.PARSE_FAIL);
+				} catch (IOException e) {
+					mErrorReceiver.sendEmptyMessage(ErrorReceiver.BROKEN_NETWORK);
+				} catch (OAuthException e) {
+					mErrorReceiver.sendEmptyMessage(ErrorReceiver.AUTH_FAIL);
 				}
+				queLength = queRetriever.resultsLength;
 				QUE_OFFSET = QUE_OFFSET + NetflixQueRetriever.OFFSET_INCREMENT;
 				queHandler.post(updateQue);
 			}
