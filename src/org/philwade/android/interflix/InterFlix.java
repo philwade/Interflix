@@ -176,6 +176,7 @@ public class InterFlix extends Activity {
 			}
     }
 
+    /* disable menus for bugfix release
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu)
 	{
@@ -183,6 +184,7 @@ public class InterFlix extends Activity {
 		inflator.inflate(R.menu.home_menu, menu);
 		return true;
 	}
+	*/
 	
 }
 

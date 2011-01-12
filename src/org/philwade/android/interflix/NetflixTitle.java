@@ -296,34 +296,21 @@ public class NetflixTitle {
 		return false;
 	}
 	
-	public boolean addToDVDQue(NetflixDataRetriever retriever)
+	public boolean addToDVDQue(NetflixDataRetriever retriever, ErrorReceiver mErrorReceiver)
 	{
 		if(!inDVDQ(retriever) && discAvailable())
 		{
 			try {
 				retriever.addToDVDQue(idUrl);
 				return true;
-			} catch (ClientProtocolException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			} catch (OAuthExpectationFailedException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			} catch (OAuthCommunicationException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
 			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+				mErrorReceiver.sendEmptyMessage(ErrorReceiver.BROKEN_NETWORK);
 			} catch (OAuthException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+				mErrorReceiver.sendEmptyMessage(ErrorReceiver.AUTH_FAIL);
 			} catch (ParserConfigurationException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+				mErrorReceiver.sendEmptyMessage(ErrorReceiver.PARSE_FAIL);
 			} catch (SAXException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+				mErrorReceiver.sendEmptyMessage(ErrorReceiver.PARSE_FAIL);
 			}
 		}
 		return false;
@@ -373,83 +360,40 @@ public class NetflixTitle {
 	}
 	
 	//que removal is done based on the id of an individual que item.
-	public void removeFromQue(NetflixDataRetriever retriever)
+	public void removeFromQue(NetflixDataRetriever retriever, ErrorReceiver mErrorReceiver)
 	{
 		try {
 			retriever.removeFromQue(id);
-		} catch (ClientProtocolException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (OAuthExpectationFailedException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (OAuthCommunicationException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			mErrorReceiver.sendEmptyMessage(ErrorReceiver.BROKEN_NETWORK);
 		} catch (OAuthException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			mErrorReceiver.sendEmptyMessage(ErrorReceiver.AUTH_FAIL);
 		} catch (ParserConfigurationException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			mErrorReceiver.sendEmptyMessage(ErrorReceiver.PARSE_FAIL);
 		} catch (SAXException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			mErrorReceiver.sendEmptyMessage(ErrorReceiver.PARSE_FAIL);
 		}
 	}
 	
-	public void rate(int rating, NetflixDataRetriever retriever)
+	public void rate(int rating, NetflixDataRetriever retriever, ErrorReceiver mErrorReceiver)
 	{
-		if((userRating != null) && (ratingId != null))
-		{
-			try {
+		try {
+			if((userRating != null) && (ratingId != null))
+			{
 				retriever.setRating(rating, idUrl, ratingId);
-			} catch (OAuthExpectationFailedException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			} catch (OAuthCommunicationException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			} catch (ParserConfigurationException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			} catch (SAXException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			} catch (OAuthException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
 			}
-		}
-		else
-		{
-			try {
+			else
+			{
 				retriever.setRating(rating, idUrl);
-			} catch (OAuthExpectationFailedException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			} catch (OAuthCommunicationException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			} catch (ParserConfigurationException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			} catch (SAXException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			} catch (OAuthException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
 			}
+		} catch (IOException e) {
+			mErrorReceiver.sendEmptyMessage(ErrorReceiver.BROKEN_NETWORK);
+		} catch (OAuthException e) {
+			mErrorReceiver.sendEmptyMessage(ErrorReceiver.AUTH_FAIL);
+		} catch (ParserConfigurationException e) {
+			mErrorReceiver.sendEmptyMessage(ErrorReceiver.PARSE_FAIL);
+		} catch (SAXException e) {
+			mErrorReceiver.sendEmptyMessage(ErrorReceiver.PARSE_FAIL);
 		}
 	}
 	

@@ -173,7 +173,7 @@ public abstract class QueActivity extends ListActivity {
 
 	public void removeFromQue(NetflixTitle title, NetflixQueRetriever retriever)
 	{
-		title.removeFromQue(retriever);
+		title.removeFromQue(retriever, mErrorReceiver);
 	}
 	
 	public void resetList()

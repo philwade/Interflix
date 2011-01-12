@@ -35,10 +35,6 @@ public class InstantQueActivity extends QueActivity {
 				NetflixQueRetriever queRetriever = new NetflixQueRetriever(getSharedPreferences(InterFlix.PREFS_FILE, 0));
 				try {
 					queItems = queRetriever.getInstantQue(QUE_OFFSET);
-				} catch (OAuthExpectationFailedException e) {
-					mErrorReceiver.sendEmptyMessage(ErrorReceiver.AUTH_FAIL);
-				} catch (OAuthCommunicationException e) {
-					mErrorReceiver.sendEmptyMessage(ErrorReceiver.AUTH_FAIL);
 				} catch (ParserConfigurationException e) {
 					mErrorReceiver.sendEmptyMessage(ErrorReceiver.PARSE_FAIL);
 				} catch (SAXException e) {
@@ -60,6 +56,16 @@ public class InstantQueActivity extends QueActivity {
 	@Override
 	void changeQuePosition(NetflixTitle title, int position) {
 		NetflixQueRetriever queRetriever = new NetflixQueRetriever(getSharedPreferences(InterFlix.PREFS_FILE, 0));	
-		queRetriever.changeInstantPosition(title, position);
+		try {
+			queRetriever.changeInstantPosition(title, position);
+		} catch (ParserConfigurationException e) {
+			mErrorReceiver.sendEmptyMessage(ErrorReceiver.PARSE_FAIL);
+		} catch (SAXException e) {
+			mErrorReceiver.sendEmptyMessage(ErrorReceiver.PARSE_FAIL);
+		} catch (IOException e) {
+			mErrorReceiver.sendEmptyMessage(ErrorReceiver.BROKEN_NETWORK);
+		} catch (OAuthException e) {
+			mErrorReceiver.sendEmptyMessage(ErrorReceiver.AUTH_FAIL);
+		}
 	}
 }

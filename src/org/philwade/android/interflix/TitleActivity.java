@@ -200,7 +200,7 @@ public class TitleActivity extends Activity
 			{
 				public void run()
 				{
-					title.rate((int) rating, retriever);
+					title.rate((int) rating, retriever, mErrorReceiver);
 					titleHandler.post(HideRatingBars);
 					refreshTitle();
 				}
@@ -217,7 +217,7 @@ public class TitleActivity extends Activity
 			{
 				public void run()
 				{
-					title.addToDVDQue(retriever);
+					title.addToDVDQue(retriever, mErrorReceiver);
 					refreshTitle();
 				}
 			};

@@ -304,60 +304,14 @@ public class NetflixDataRetriever {
     	editor.commit();
     }
 
-    public void changeInstantPosition(NetflixTitle title, int position)
+    public void changeInstantPosition(NetflixTitle title, int position) throws ClientProtocolException, OAuthExpectationFailedException, OAuthCommunicationException, IOException, OAuthException, ParserConfigurationException, SAXException
     {
-			try {
-				addToQue(title.idUrl, INSTANT_QUE_URI, position);
-			} catch (ClientProtocolException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			} catch (OAuthExpectationFailedException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			} catch (OAuthCommunicationException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			} catch (OAuthException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			} catch (ParserConfigurationException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			} catch (SAXException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
+		addToQue(title.idUrl, INSTANT_QUE_URI, position);
     }
     
-    public void changeDiscPosition(NetflixTitle title, int position)
+    public void changeDiscPosition(NetflixTitle title, int position) throws ClientProtocolException, OAuthExpectationFailedException, OAuthCommunicationException, IOException, OAuthException, ParserConfigurationException, SAXException
     {
-    	try {
-			addToQue(title.idUrl, DISC_QUE_URI, position);
-		} catch (ClientProtocolException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (OAuthExpectationFailedException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (OAuthCommunicationException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (OAuthException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (ParserConfigurationException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (SAXException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		addToQue(title.idUrl, DISC_QUE_URI, position);
     }
     
 	public void addToQue(String idUrl, String queUrl, int position) throws ClientProtocolException, OAuthExpectationFailedException, OAuthCommunicationException, IOException, OAuthException, ParserConfigurationException, SAXException {

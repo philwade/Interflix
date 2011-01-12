@@ -36,10 +36,6 @@ public class DiscQueActivity extends QueActivity {
 				NetflixQueRetriever queRetriever = new NetflixQueRetriever(getSharedPreferences(InterFlix.PREFS_FILE, 0));
 					try {
 						queItems = queRetriever.getDiscQue(QUE_OFFSET);
-					} catch (OAuthExpectationFailedException e) {
-						mErrorReceiver.sendEmptyMessage(ErrorReceiver.AUTH_FAIL);
-					} catch (OAuthCommunicationException e) {
-						mErrorReceiver.sendEmptyMessage(ErrorReceiver.AUTH_FAIL);
 					} catch (ParserConfigurationException e) {
 						mErrorReceiver.sendEmptyMessage(ErrorReceiver.PARSE_FAIL);
 					} catch (SAXException e) {
@@ -61,6 +57,16 @@ public class DiscQueActivity extends QueActivity {
 	@Override
 	void changeQuePosition(NetflixTitle title, int position) {
 		NetflixQueRetriever queRetriever = new NetflixQueRetriever(getSharedPreferences(InterFlix.PREFS_FILE, 0));	
-		queRetriever.changeDiscPosition(title, position);
+		try {
+			queRetriever.changeDiscPosition(title, position);
+		} catch (ParserConfigurationException e) {
+			mErrorReceiver.sendEmptyMessage(ErrorReceiver.PARSE_FAIL);
+		} catch (SAXException e) {
+			mErrorReceiver.sendEmptyMessage(ErrorReceiver.PARSE_FAIL);
+		} catch (IOException e) {
+			mErrorReceiver.sendEmptyMessage(ErrorReceiver.BROKEN_NETWORK);
+		} catch (OAuthException e) {
+			mErrorReceiver.sendEmptyMessage(ErrorReceiver.AUTH_FAIL);
+		}
 	}
 }
