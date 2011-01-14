@@ -32,6 +32,7 @@ public abstract class QueActivity extends ListActivity {
 	protected static final int PROGRESS_DIALOG = 0;	
 	protected static final int NUMBER_PICK_DIALOG = 2;	
 	protected static final int LOAD_MORE_ID = 1;	
+	protected int offsetIncrement;
 	protected int QUE_OFFSET = 0;
 	protected int queLength = 0;
 	protected int displayCount = 0; //number of titles we're displaying
@@ -44,6 +45,8 @@ public abstract class QueActivity extends ListActivity {
 	public ErrorReceiver mErrorReceiver;
 	public void onCreate(Bundle savedInstanceState) {
 		   super.onCreate(savedInstanceState);
+		   
+		   offsetIncrement = Integer.parseInt(getSharedPreferences(InterFlix.PREFS_FILE, 0).getString("que step", "25"));
 		   moreButton = new Button(this);
 		   moreButton.setText(R.string.load_more_text);
 		   moreButton.setId(LOAD_MORE_ID);

@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="que_preference_values">
+    	<item>10</item>
+    	<item>25</item>
+    	<item>50</item>
+    	<item>75</item>
+    	<item>100</item>
+    	<item>200</item>
+    	<item>300</item>
+    	<item>400</item>
+    	<item>500</item>
+    </string-array>
+    <string-array name="search_preference_values">
+    	<item>10</item>
+    	<item>25</item>
+    	<item>50</item>
+    	<item>75</item>
+    	<item>100</item>
+    </string-array>
+    <string-array name="que_display_preference_values">
+    	<item>Instant</item>
+    	<item>Disc</item>
+    </string-array>
+</resources>

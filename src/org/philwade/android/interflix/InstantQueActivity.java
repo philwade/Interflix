@@ -45,7 +45,7 @@ public class InstantQueActivity extends QueActivity {
 					mErrorReceiver.sendEmptyMessage(ErrorReceiver.AUTH_FAIL);
 				}
 				queLength = queRetriever.resultsLength;
-				QUE_OFFSET = QUE_OFFSET + NetflixQueRetriever.OFFSET_INCREMENT;
+				QUE_OFFSET = QUE_OFFSET + offsetIncrement;
 				queHandler.post(updateQue);
 			}
 				

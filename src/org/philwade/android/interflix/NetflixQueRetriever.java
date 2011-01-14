@@ -49,7 +49,7 @@ public class NetflixQueRetriever extends NetflixDataRetriever {
 	
 	public NetflixTitle[] getQue(String uri, int offset) throws OAuthExpectationFailedException, OAuthCommunicationException, ParserConfigurationException, SAXException, IOException, OAuthException
 	{
-		String url = "http://api.netflix.com/users/" + userId + uri + "?max_results=" + OFFSET_INCREMENT + "&start_index=" + offset;
+		String url = "http://api.netflix.com/users/" + userId + uri + "?max_results=" + offsetIncrement + "&start_index=" + offset;
 		Document xml = fetchDocument(url);
 		NodeList etagList = xml.getElementsByTagName("etag");
 		String etag = etagList.item(0).getChildNodes().item(0).getNodeValue();

@@ -1,9 +1,31 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PreferenceScreen
   xmlns:android="http://schemas.android.com/apk/res/android">
-  <DialogPreference
-  	android:key="step amount"
-  	android:title="Number of titles to display"
-  	android:dialogLayout="@layout/number_picker_pref"
+  <ListPreference
+  	android:key="que step"
+  	android:title="Que Results"
+  	android:summary="Number of que results to return"
+  	android:dialogTitle="Select how many results to return from your que"
+  	android:defaultValue="25"
+  	android:entries="@array/que_preference_values"
+  	android:entryValues="@array/que_preference_values"
+  />
+  <ListPreference
+  	android:key="search step"
+  	android:title="Search Results"
+  	android:summary="Number of search results to return"
+  	android:dialogTitle="Select how many results to return from searches"
+  	android:defaultValue="25"
+  	android:entries="@array/search_preference_values"
+  	android:entryValues="@array/search_preference_values"
+  />
+  <ListPreference
+  	android:key="que display"
+  	android:title="Que Display"
+  	android:summary="Which que to display first"
+  	android:dialogTitle="Select which que to display first"
+  	android:defaultValue="Instant"
+  	android:entries="@array/que_display_preference_values"
+  	android:entryValues="@array/que_display_preference_values"
   />
 </PreferenceScreen>

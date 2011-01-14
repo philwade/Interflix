@@ -15,6 +15,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.ImageButton;
@@ -176,7 +177,6 @@ public class InterFlix extends Activity {
 			}
     }
 
-    /* disable menus for bugfix release
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu)
 	{
@@ -184,7 +184,21 @@ public class InterFlix extends Activity {
 		inflator.inflate(R.menu.home_menu, menu);
 		return true;
 	}
-	*/
+	
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) 
+	{
+		switch(item.getItemId())
+		{
+			case R.id.home_preferences:
+				Intent prefIntent = new Intent();
+    			prefIntent.setClassName("org.philwade.android.interflix", "org.philwade.android.interflix.InterflixPreferences");
+    			startActivity(prefIntent);
+				return true;
+			default:
+				return super.onOptionsItemSelected(item);
+		}
+	}
 	
 }
 

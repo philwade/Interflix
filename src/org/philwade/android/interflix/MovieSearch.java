@@ -32,6 +32,7 @@ public class MovieSearch extends QueActivity {
 	public String currentSearch;
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        offsetIncrement = Integer.parseInt(getSharedPreferences(InterFlix.PREFS_FILE, 0).getString("search step", "25"));
 		setContentView(R.layout.search);
         editText = (EditText) findViewById(R.id.entry);
         okButton = (Button) findViewById(R.id.ok);
@@ -94,7 +95,7 @@ public class MovieSearch extends QueActivity {
 					queItems = searchRetriever.getSearchTitles(searchTerm);
 					queLength = searchRetriever.resultsLength;
 					
-					if(queLength > NetflixSearchRetriever.OFFSET_INCREMENT)
+					if(queLength > offsetIncrement)
 					{
 						moreButton.setEnabled(true);
 					}
@@ -109,7 +110,7 @@ public class MovieSearch extends QueActivity {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
-				QUE_OFFSET = QUE_OFFSET + NetflixSearchRetriever.OFFSET_INCREMENT;
+				QUE_OFFSET = QUE_OFFSET + offsetIncrement;
 				queHandler.post(updateQue);
 			}
 				
@@ -133,7 +134,7 @@ public class MovieSearch extends QueActivity {
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
-				QUE_OFFSET = QUE_OFFSET + NetflixSearchRetriever.OFFSET_INCREMENT;
+				QUE_OFFSET = QUE_OFFSET + offsetIncrement;
 				queHandler.post(updateQue);
 			}
 				

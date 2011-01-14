@@ -66,8 +66,8 @@ public class NetflixDataRetriever {
     public static final int HTTP_GET = 0;
     public static final int HTTP_POST = 1;
     public static final int HTTP_DELETE = 2;
-    public static final int OFFSET_INCREMENT = 25;
     public static final int NO_POSITION = -1;
+    protected int offsetIncrement;
     private static final Uri CALLBACK_URI = Uri.parse(APP_URI);
     private static final String INSTANT_QUE_URI = "/queues/instant";
     private static final String DISC_QUE_URI = "/queues/disc";
@@ -83,6 +83,7 @@ public class NetflixDataRetriever {
     public NetflixDataRetriever(SharedPreferences preferences)
     {
     	this.prefs = preferences;
+    	offsetIncrement = Integer.parseInt(prefs.getString("que step", "25"));
     	userToken =  prefs.getString("oauth_token", null);
     	userSecret = prefs.getString("oauth_token_secret", null);
     	userId = prefs.getString("user_id", null);
