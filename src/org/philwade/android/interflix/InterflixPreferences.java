@@ -2,6 +2,7 @@ package org.philwade.android.interflix;
 
 import android.os.Bundle;
 import android.preference.PreferenceActivity;
+import android.preference.PreferenceManager;
 
 public class InterflixPreferences extends PreferenceActivity {
 
@@ -10,5 +11,7 @@ public class InterflixPreferences extends PreferenceActivity {
 	{
 		super.onCreate(savedInstanceState);
 		addPreferencesFromResource(R.xml.main_preferences);
+		PreferenceManager manager = getPreferenceManager();
+		manager.setSharedPreferencesName(InterFlix.PREFS_FILE);
 	}
 }
