@@ -15,7 +15,6 @@ import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
 
-import android.util.Log;
 
 public class NetflixTitle {
 
@@ -35,6 +34,7 @@ public class NetflixTitle {
 	public String id;
 	public final static float CANT_HAVE_RATING = -1; //stuff like individual discs from a series cannot have a rating
 	public final static float NOT_INTERESTED = -2;
+	@SuppressWarnings("unused")
 	private final static String TAG = "NetflixTitle";
 	
 	public NetflixTitle(Document rootElement)

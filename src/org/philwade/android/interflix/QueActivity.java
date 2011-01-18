@@ -196,7 +196,8 @@ public abstract class QueActivity extends ListActivity {
 	};
 	
 	   protected class TitleAdapter extends ArrayAdapter<NetflixTitle> {
-	    	private ArrayList<NetflixTitle> items = null;
+	    	@SuppressWarnings("unused") //this gets used in child classes
+			private ArrayList<NetflixTitle> items = null;
 	    	public TitleAdapter(Context context, int textViewResourceId)
 	    	{
 	    		super(context, textViewResourceId);	

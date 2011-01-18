@@ -176,12 +176,12 @@ public class InterFlix extends Activity {
 				e.printStackTrace();
 			}
     }
-
+/*
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu)
 	{
-		MenuInflater inflator = getMenuInflater();
-		inflator.inflate(R.menu.home_menu, menu);
+		MenuInflater inflater = getMenuInflater();
+		inflater.inflate(R.menu.home_menu, menu);
 		return true;
 	}
 	
@@ -199,7 +199,7 @@ public class InterFlix extends Activity {
 				return super.onOptionsItemSelected(item);
 		}
 	}
-	
+*/	
 }
 
 

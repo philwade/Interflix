@@ -31,7 +31,6 @@ import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.client.methods.HttpDelete;
-import org.apache.http.client.methods.HttpPut;
 import org.apache.http.client.methods.HttpRequestBase;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.message.BasicNameValuePair;
@@ -45,7 +44,6 @@ import org.xml.sax.SAXException;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Handler;
 import android.os.Message;
@@ -386,6 +384,7 @@ public class NetflixDataRetriever {
 		{
 			parameters.put("rating", "not_interested");
 		}
+		@SuppressWarnings("unused")
 		Document d = fetchDocument(url, method, parameters);
 	}
 	
