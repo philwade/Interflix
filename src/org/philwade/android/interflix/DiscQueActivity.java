@@ -44,6 +44,8 @@ public class DiscQueActivity extends QueActivity {
 						mErrorReceiver.sendEmptyMessage(ErrorReceiver.BROKEN_NETWORK);
 					} catch (OAuthException e) {
 						mErrorReceiver.sendEmptyMessage(ErrorReceiver.AUTH_FAIL);
+					} catch (NullPointerException e) {
+						mErrorReceiver.sendEmptyMessage(ErrorReceiver.DEFAULT);
 					}
 					queLength = queRetriever.resultsLength;
 				QUE_OFFSET = QUE_OFFSET + offsetIncrement;
