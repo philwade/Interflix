@@ -64,6 +64,7 @@ public class TitleActivity extends Activity
 			}
 		});
 		retriever = new NetflixDataRetriever(getSharedPreferences(InterFlix.PREFS_FILE, 0));
+		setProgressBarIndeterminateVisibility(true);
 		refreshTitle();
 	}
 	
@@ -256,7 +257,6 @@ public class TitleActivity extends Activity
 	
 	public void refreshTitle()
 	{
-		setProgressBarIndeterminateVisibility(true);
 		Thread t = new Thread()
 		{
 			public void run()
