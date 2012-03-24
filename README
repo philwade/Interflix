@@ -1,0 +1,5 @@
+Interflix is an android app for managing Netflix queues. It is currently available on the android market: https://play.google.com/store/apps/details?id=org.philwade.android.interflix
+
+At the moment it is quite buggy because of Netflix API changes. Pull requests welcome.
+
+MIT licensed: http://www.opensource.org/licenses/mit-license.php
